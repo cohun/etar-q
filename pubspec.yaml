@@ -12,6 +12,9 @@ environment:
 dependencies:
   cupertino_icons: ^1.0.6
   equatable: ^2.0.5
+  firebase_auth: ^4.9.0
+  firebase_core: ^2.15.1
+  firebase_ui_auth: ^1.7.0
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -34,3 +37,8 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
+
+fonts:
+  - family: SocialIcons
+    fonts:
+      - asset: packages/firebase_ui_auth/fonts/SocialIcons.ttf

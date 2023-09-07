@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "211744724721",
+    "project_id": "faker-andrea",
+    "storage_bucket": "faker-andrea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:211744724721:android:a45f91e1ec8cf8cee0fb50",
+        "android_client_info": {
+          "package_name": "com.example.etar_q"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "211744724721-3h16mn33m536c6vtsr4h9qht0hclcrrl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCExVQp3sXQ3qaxl8WCwtm5vRocmnNQqng"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "211744724721-3h16mn33m536c6vtsr4h9qht0hclcrrl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "211744724721-50sa41q3t3vq1dcucmrs73mr5a4pob0d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fakerAppFlutterFirebase"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:211744724721:android:1c35110ac2eaccfde0fb50",
+        "android_client_info": {
+          "package_name": "com.example.faker_app_flutter_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "211744724721-3h16mn33m536c6vtsr4h9qht0hclcrrl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCExVQp3sXQ3qaxl8WCwtm5vRocmnNQqng"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "211744724721-3h16mn33m536c6vtsr4h9qht0hclcrrl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "211744724721-50sa41q3t3vq1dcucmrs73mr5a4pob0d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fakerAppFlutterFirebase"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
