@@ -23,14 +23,7 @@ class CustomSignInScreen extends ConsumerWidget {
       ),
       body: SignInScreen(
         providers: authProviders,
-        // actions: [
-        //   AuthStateChangeAction<SignedIn>((context, state) {
-        //     context.goNamed(AppRoute.profile.name);
-        //   }),
-        //   AuthStateChangeAction<UserCreated>((context, state) {
-        //     context.goNamed(AppRoute.profile.name);
-        //   }),
-        // ],
+       
         headerBuilder: (context, constraints, shrinkOffset
 ) {
              return Padding(
@@ -41,6 +34,16 @@ class CustomSignInScreen extends ConsumerWidget {
                ),
              );
            },
+           subtitleBuilder: (context, action) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: action == AuthAction.signIn
+                          ? const Text(
+                              'Üdvözlünk az ETAR applikációban, jelenkezz be a fiókodba!')
+                          : const Text(
+                              'Üdvözlünk az ETAR applikációban, hozz létre egy fiókot!'),
+                    );
+                  },
            footerBuilder: (context, action) {
              return const Padding(
                padding: EdgeInsets.only(top: 16),

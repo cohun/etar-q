@@ -16,11 +16,7 @@ class CustomProfileScreen extends ConsumerWidget {
         title: const Text('Felhasználói profil'),
       ),
       providers: authProviders,
-      // actions: [
-      //   SignedOutAction((context) {
-      //     context.goNamed(AppRoute.signIn.name);
-      //   }),
-      // ],
+      
     );
   }
 }
