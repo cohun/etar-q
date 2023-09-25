@@ -40,8 +40,8 @@ class _DropdownState extends State<Dropdown> {
                 ),
                 Expanded(
                   child: Text(
-                    '${widget.users.approvedRole}',
-                    style: TextStyle(
+                    widget.users.approvedRole,
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: Colors.yellow,

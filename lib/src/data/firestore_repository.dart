@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:etar_q/src/data/users.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FirestoreRepository {
@@ -53,7 +52,9 @@ class FirestoreRepository {
         fromFirestore: (snapshot, _) => Users.fromMap(snapshot.data()!),
         toFirestore: (users, _) => users.toMap());
     final docSnap = await ref.get();
+
     final oneUser = docSnap.data();
+
     return oneUser!;
   }
 }

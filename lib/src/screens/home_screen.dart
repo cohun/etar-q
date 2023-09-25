@@ -82,7 +82,7 @@ class UsersListView extends ConsumerWidget {
                   },
                 ),
                 MaterialButton(
-                  child: Text("OK"),
+                  child: const Text("OK"),
                   onPressed: () {
                     ref
                         .read(firestoreRepositoryProvider)
