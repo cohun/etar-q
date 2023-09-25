@@ -64,7 +64,7 @@ class UsersListView extends ConsumerWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("${users.name} jogosultsága"),
-          content: Container(
+          content: SizedBox(
               width: 200,
               height: 40,
               child: Dropdown(
@@ -102,11 +102,27 @@ class UsersListView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final firestoreRepository = ref.watch(firestoreRepositoryProvider);
     final user = ref.read(firebaseAuthProvider).currentUser;
+
     final oneUser =
         ref.read(firestoreRepositoryProvider).oneUserQuery(user!.uid);
+
     return Column(
       children: [
-        Cards(name: '${user!.displayName}', company: 'comp'),
+        FutureBuilder(
+            future: oneUser,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Text(
+                  "Something went wrong",
+                );
+              }
+              if (snapshot.connectionState == ConnectionState.done) {
+                Users data = snapshot.data as Users;
+                return Cards(
+                    name: '${user.displayName}', company: data.company);
+              }
+              return const Center(child: CircularProgressIndicator());
+            }),
         const SizedBox(
           height: 10,
         ),

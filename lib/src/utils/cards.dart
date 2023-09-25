@@ -6,12 +6,10 @@ class Cards extends StatelessWidget {
       this.name = '',
       this.company = '',
       this.address = '',
-      this.approvedRole = 'elbírálás alatt',
       this.counter = ''});
   final String name;
   final String company;
   final String address;
-  final String approvedRole;
   final String counter;
   @override
   Widget build(BuildContext context) {
@@ -37,7 +35,6 @@ class Cards extends StatelessWidget {
                 ),
                 ListTile(
                   leading: const Icon(Icons.person_2_sharp),
-                  subtitle: Text("Jogosultság: $approvedRole"),
                   title: Text(name),
                 ),
                 const Divider(
