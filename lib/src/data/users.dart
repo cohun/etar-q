@@ -16,11 +16,11 @@ class Users extends Equatable {
 
   factory Users.fromMap(Map<String, dynamic> map) {
     return Users(
-      uid: map['uid'] as String,
-      name: map['name'] as String,
-      company: map['company'] as String,
-      role: map['role'] as String,
-      approvedRole: map['approvedRole'] as String,
+      uid: map['uid']?? '',
+      name: map['name'] ?? '',
+      company: map['company'] ?? '',
+      role: map['role'] ?? '',
+      approvedRole: map['approvedRole'] ?? '',
     );
   }
 

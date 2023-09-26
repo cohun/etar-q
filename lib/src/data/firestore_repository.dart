@@ -52,10 +52,12 @@ class FirestoreRepository {
         fromFirestore: (snapshot, _) => Users.fromMap(snapshot.data()!),
         toFirestore: (users, _) => users.toMap());
     final docSnap = await ref.get();
+    if (docSnap.exists) {
+      final oneUser = docSnap.data();
+      return oneUser!;
+    }
 
-    final oneUser = docSnap.data();
-
-    return oneUser!;
+    return  Users(uid: uid, name: '', company: '', role: '', approvedRole: '');    
   }
 }
 

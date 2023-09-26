@@ -1,4 +1,5 @@
 import 'package:etar_q/src/routing/go_router_refresh_stream.dart';
+import 'package:etar_q/src/screens/add_company.dart';
 import 'package:etar_q/src/screens/custom_profile_screen.dart';
 import 'package:etar_q/src/screens/custom_sign_in_screen.dart';
 import 'package:etar_q/src/screens/home_screen.dart';
@@ -11,6 +12,7 @@ enum AppRoute {
   signIn,
   home,
   profile,
+  addCompany,
 }
 
 final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
@@ -51,6 +53,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             path: 'profile',
             name: AppRoute.profile.name,
             builder: (context, state) => const CustomProfileScreen(),
+          ),
+          GoRoute(
+            path: 'add-company',
+            name: AppRoute.addCompany.name,
+            builder: (context, state) => const AddCompany(),
           ),
         ],
       ),
