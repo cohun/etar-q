@@ -27,15 +27,15 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final isLoggedIn = firebaseAuth.currentUser != null;
       if (isLoggedIn) {
-          if (state.uri.path == '/sign-in') {
-            return '/home';
-          }
-         } else {
-          if (state.uri.path.startsWith('/home')) {
-            return '/sign-in';
-          }
+        if (state.uri.path == '/sign-in') {
+          return '/home';
         }
-        return null;  
+      } else {
+        if (state.uri.path.startsWith('/home')) {
+          return '/sign-in';
+        }
+      }
+      return null;
     },
     refreshListenable: GoRouterRefreshStream(firebaseAuth.authStateChanges()),
     routes: [
@@ -57,11 +57,15 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'add-company',
             name: AppRoute.addCompany.name,
-            builder: (context, state) => const AddCompany(),
+            builder: (context, state) {
+              final user = state.extra as User;
+              return AddCompany(
+                user: user,
+              );
+            },
           ),
         ],
       ),
-
     ],
   );
 });

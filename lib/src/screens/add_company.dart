@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AddCompany extends StatefulWidget {
-  const AddCompany({super.key});
+  const AddCompany({super.key, required this.user});
+  final User user;
 
   @override
   State<AddCompany> createState() => _AddCompanyState();
@@ -17,6 +19,14 @@ class _AddCompanyState extends State<AddCompany> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              widget.user.displayName!,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.center,
+            ),
+          ),
           const Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(

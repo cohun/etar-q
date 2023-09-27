@@ -118,86 +118,94 @@ class UsersListView extends ConsumerWidget {
               }
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.data!.company == '') {
-                  return SizedBox(height: 300, width: MediaQuery.of(context).size.width,
+                  return SizedBox(
+                    height: 300,
+                    width: MediaQuery.of(context).size.width,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text('Még nem választottál céget!'),
                         FloatingActionButton(
-                                  heroTag: 'btn2',
-                                  child: const Icon(Icons.add),
-                                  onPressed: () {
-                                    context.goNamed(AppRoute.addCompany.name);
-                                    // final user = ref.read(firebaseAuthProvider).currentUser;
-                                    // ref.read(firestoreRepositoryProvider).addUsers(uid: user!.uid, company: 'company2',
-                                    // name: user.displayName.toString());
-                                  },
-                                ),
+                          heroTag: 'btn2',
+                          child: const Icon(Icons.add),
+                          onPressed: () {
+                            context.goNamed(AppRoute.addCompany.name,
+                                extra: user);
+                            // final user = ref.read(firebaseAuthProvider).currentUser;
+                            // ref.read(firestoreRepositoryProvider).addUsers(uid: user!.uid, company: 'company2',
+                            // name: user.displayName.toString());
+                          },
+                        ),
                       ],
                     ),
                   );
                 }
                 Users data = snapshot.data as Users;
-                return SizedBox(height: MediaQuery.of(context).size.height*0.8,
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.8,
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Cards(
-                          name: '${user.displayName}', company: data.company),
-                          const SizedBox(
-                          height: 10,
-                        ),
-                        const Text("Összes felhasználó:"),
-                        Expanded(
-                          child: FirestoreListView<Users>(
-                            query: firestoreRepository.usersQuery(),
-                            itemBuilder:
-                  (BuildContext context, QueryDocumentSnapshot<Users> doc) {
-                    if (!doc.exists) {
-                      return SizedBox(height: 100, width: 100,
-                        child: FloatingActionButton(
+                      Cards(name: '${user.displayName}', company: data.company),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Text("Összes felhasználó:"),
+                      Expanded(
+                        child: FirestoreListView<Users>(
+                          query: firestoreRepository.usersQuery(),
+                          itemBuilder: (BuildContext context,
+                              QueryDocumentSnapshot<Users> doc) {
+                            if (!doc.exists) {
+                              return SizedBox(
+                                height: 100,
+                                width: 100,
+                                child: FloatingActionButton(
                                   heroTag: 'btn2',
                                   child: const Icon(Icons.add),
                                   onPressed: () {
-                                    final user = ref.read(firebaseAuthProvider).currentUser;
-                                    ref.read(firestoreRepositoryProvider).addUsers(uid: user!.uid, company: 'company2',
-                                    name: user.displayName.toString());
+                                    final user = ref
+                                        .read(firebaseAuthProvider)
+                                        .currentUser;
+                                    ref
+                                        .read(firestoreRepositoryProvider)
+                                        .addUsers(
+                                            uid: user!.uid,
+                                            company: 'company2',
+                                            name: user.displayName.toString());
                                   },
                                 ),
-                      );
-                    }
-                              final users = doc.data();
-                              return Column(
-                  children: [
-                    ListTile(
-                      hoverColor: Colors.amber,
-                      selectedColor: Colors.amber,
-                      leading: const Icon(Icons.person_2_outlined),
-                      title: Text(users.name),
-                      subtitle: Text(users.approvedRole),
-                      onTap: () {
-                        _showDialog(context, users, ref);
-                      },
-                    ),
-                    const Divider(
-                      color: Colors.black45,
-                      height: 8,
-                    ),
-                  ],
                               );
-                            },
-                          ),
+                            }
+                            final users = doc.data();
+                            return Column(
+                              children: [
+                                ListTile(
+                                  hoverColor: Colors.amber,
+                                  selectedColor: Colors.amber,
+                                  leading: const Icon(Icons.person_2_outlined),
+                                  title: Text(users.name),
+                                  subtitle: Text(users.approvedRole),
+                                  onTap: () {
+                                    _showDialog(context, users, ref);
+                                  },
+                                ),
+                                const Divider(
+                                  color: Colors.black45,
+                                  height: 8,
+                                ),
+                              ],
+                            );
+                          },
                         ),
+                      ),
                     ],
                   ),
                 );
-
-
               }
               return const Center(child: CircularProgressIndicator());
             }),
-        
       ],
     );
   }
