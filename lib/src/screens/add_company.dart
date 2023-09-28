@@ -103,6 +103,9 @@ class _AddCompanyState extends ConsumerState<AddCompany> {
                                         '${_companyController.text} Már van ilyen néven cég! Próbáld a cég ETAR kódjával a belépést.')),
                               );
                             } else {
+                              firestoreRepository.countCounter().get().then(
+                                  (value) =>
+                                      print(value.docs[0].data().counter));
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                     content: Text(

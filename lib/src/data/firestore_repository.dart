@@ -69,12 +69,21 @@ class FirestoreRepository {
             fromFirestore: (snapshot, _) => Counter.fromMap(snapshot.data()!),
             toFirestore: (counter, _) => counter.toMap());
     final docSnap = await ref.get();
-
     if (docSnap.docs.isEmpty) {
       return false;
     } else {
       return true;
     }
+  }
+
+  Query<Counter> countCounter() {
+    return _firestore
+        .collection('counter')
+        .orderBy('counter', descending: true)
+        .limit(1)
+        .withConverter(
+            fromFirestore: (snapshot, _) => Counter.fromMap(snapshot.data()!),
+            toFirestore: (counter, _) => counter.toMap());
   }
 }
 
