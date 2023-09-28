@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:etar_q/src/data/counter.dart';
 import 'package:etar_q/src/data/users.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -60,12 +61,19 @@ class FirestoreRepository {
   }
 
   Future<bool> isCompany(String company) async {
-    final ref = _firestore.collection('counter').doc(company);
+    final ref = _firestore
+        .collection('counter')
+        .where('company', isEqualTo: company)
+        .limit(1)
+        .withConverter(
+            fromFirestore: (snapshot, _) => Counter.fromMap(snapshot.data()!),
+            toFirestore: (counter, _) => counter.toMap());
     final docSnap = await ref.get();
-    if (docSnap.exists) {
-      return true;
-    } else {
+
+    if (docSnap.docs.isEmpty) {
       return false;
+    } else {
+      return true;
     }
   }
 }

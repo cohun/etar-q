@@ -1,15 +1,17 @@
+import 'package:etar_q/src/data/firestore_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddCompany extends StatefulWidget {
+class AddCompany extends ConsumerStatefulWidget {
   const AddCompany({super.key, required this.user});
   final User user;
 
   @override
-  State<AddCompany> createState() => _AddCompanyState();
+  ConsumerState<AddCompany> createState() => _AddCompanyState();
 }
 
-class _AddCompanyState extends State<AddCompany> {
+class _AddCompanyState extends ConsumerState<AddCompany> {
   final _compKey = GlobalKey<FormState>();
   final _counterKey = GlobalKey<FormState>();
   late final TextEditingController _companyController;
@@ -34,6 +36,7 @@ class _AddCompanyState extends State<AddCompany> {
 
   @override
   Widget build(BuildContext context) {
+    final firestoreRepository = ref.watch(firestoreRepositoryProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text('Cég megadása'),
@@ -89,11 +92,24 @@ class _AddCompanyState extends State<AddCompany> {
                   ElevatedButton(
                       onPressed: () {
                         if (_compKey.currentState!.validate()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                content: Text(
-                                    '${_companyController.text} cég rögzítve')),
-                          );
+                          firestoreRepository
+                              .isCompany(_companyController.text)
+                              .then((value) {
+                            if (value) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    duration: const Duration(seconds: 6),
+                                    content: Text(
+                                        '${_companyController.text} Már van ilyen néven cég! Próbáld a cég ETAR kódjával a belépést.')),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text(
+                                        '${_companyController.text} Cég rögzítve')),
+                              );
+                            }
+                          });
                         }
                       },
                       child: Text('Rögzítés'))
