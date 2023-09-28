@@ -10,6 +10,28 @@ class AddCompany extends StatefulWidget {
 }
 
 class _AddCompanyState extends State<AddCompany> {
+  final _compKey = GlobalKey<FormState>();
+  final _counterKey = GlobalKey<FormState>();
+  late final TextEditingController _companyController;
+  late final TextEditingController _addressController;
+  late final TextEditingController _counterController;
+
+  @override
+  void initState() {
+    super.initState();
+    _companyController = TextEditingController();
+    _addressController = TextEditingController();
+    _counterController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _companyController.dispose();
+    _addressController.dispose();
+    _counterController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,15 +61,42 @@ class _AddCompanyState extends State<AddCompany> {
           Padding(
             padding: EdgeInsets.all(12),
             child: Form(
+              key: _compKey,
               child: Column(
                 children: [
                   TextFormField(
+                    controller: _companyController,
                     decoration: const InputDecoration(label: Text('Cég neve')),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Nem lehet üres';
+                      }
+
+                      return null;
+                    },
                   ),
                   TextFormField(
+                    controller: _addressController,
                     decoration: const InputDecoration(label: Text('Cég címe')),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Nem lehet üres';
+                      }
+
+                      return null;
+                    },
                   ),
-                  ElevatedButton(onPressed: () {}, child: Text('Rögzítés'))
+                  ElevatedButton(
+                      onPressed: () {
+                        if (_compKey.currentState!.validate()) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text(
+                                    '${_companyController.text} cég rögzítve')),
+                          );
+                        }
+                      },
+                      child: Text('Rögzítés'))
                 ],
               ),
             ),
@@ -63,13 +112,38 @@ class _AddCompanyState extends State<AddCompany> {
           Padding(
             padding: EdgeInsets.all(12),
             child: Form(
+              key: _counterKey,
               child: Column(
                 children: [
                   TextFormField(
+                    controller: _counterController,
                     decoration:
                         const InputDecoration(label: Text('Cég ETAR kód')),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Nem lehet üres';
+                      }
+                      bool counterlValid = RegExp(r"^[0-9]*$").hasMatch(value);
+
+                      if (!counterlValid) {
+                        return 'Csak számok lehetnek!';
+                      }
+                      return null;
+                    },
                   ),
-                  ElevatedButton(onPressed: () {}, child: Text('Rögzítés'))
+                  ElevatedButton(
+                      onPressed: () {
+                        if (_counterKey.currentState!.validate()) {
+                          // If the form is valid, display a snackbar. In the real world,
+                          // you'd often call a server or save the information in a database.
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text(
+                                    '${_counterController.text} ETAR kód rögzítve')),
+                          );
+                        }
+                      },
+                      child: Text('Rögzítés'))
                 ],
               ),
             ),

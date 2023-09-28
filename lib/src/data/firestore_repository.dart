@@ -56,8 +56,17 @@ class FirestoreRepository {
       final oneUser = docSnap.data();
       return oneUser!;
     }
+    return Users(uid: uid, name: '', company: '', role: '', approvedRole: '');
+  }
 
-    return  Users(uid: uid, name: '', company: '', role: '', approvedRole: '');    
+  Future<bool> isCompany(String company) async {
+    final ref = _firestore.collection('counter').doc(company);
+    final docSnap = await ref.get();
+    if (docSnap.exists) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 
