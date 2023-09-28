@@ -9,10 +9,10 @@ class FirestoreRepository {
   final FirebaseFirestore _firestore;
 
   Future<void> addCounter(
-      {required String counter,
+      {required num counter,
       required String company,
       required String address}) async {
-    final docRef = _firestore.collection('counter').doc(counter);
+    final docRef = _firestore.collection('counter').doc(counter.toString());
 
     await docRef
         .set({'counter': counter, 'company': company, 'address': address});

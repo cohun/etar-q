@@ -7,7 +7,7 @@ class Counter extends Equatable {
     required this.address,
     required this.company,
   });
-  final String counter;
+  final num counter;
   final String address;
   final String company;
 
