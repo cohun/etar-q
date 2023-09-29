@@ -85,6 +85,18 @@ class FirestoreRepository {
             fromFirestore: (snapshot, _) => Counter.fromMap(snapshot.data()!),
             toFirestore: (counter, _) => counter.toMap());
   }
+
+  Future<Counter> oneCounter(String counter) async {
+    final ref = _firestore.collection('counter').doc(counter).withConverter(
+        fromFirestore: (snapshot, _) => Counter.fromMap(snapshot.data()!),
+        toFirestore: (counter, _) => counter.toMap());
+    final docSnap = await ref.get();
+    if (docSnap.exists) {
+      final oneCounter = docSnap.data();
+      return oneCounter!;
+    }
+    return const Counter(counter: 0, company: '', address: '');
+  }
 }
 
 final firestoreRepositoryProvider = Provider<FirestoreRepository>((ref) {

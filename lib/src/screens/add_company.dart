@@ -43,12 +43,12 @@ class _AddCompanyState extends ConsumerState<AddCompany> {
           counter: counter, company: company, address: address);
     }
 
-    void addUsers(String company) {
+    void addUsers(String company, String role) {
       firestoreRepository.addUsers(
           uid: widget.user.uid,
           company: company,
           name: widget.user.displayName!,
-          role: 'super');
+          role: role);
     }
 
     return SafeArea(
@@ -142,7 +142,7 @@ class _AddCompanyState extends ConsumerState<AddCompany> {
                                             value.docs[0].data().counter,
                                             _companyController.text,
                                             _addressController.text));
-                                    addUsers(_companyController.text);
+                                    addUsers(_companyController.text, 'super');
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                           content: Text(
@@ -152,7 +152,7 @@ class _AddCompanyState extends ConsumerState<AddCompany> {
                                 });
                               }
                             },
-                            child: Text('Rögzítés'))
+                            child: const Text('Rögzítés'))
                       ],
                     ),
                   ),
@@ -191,13 +191,27 @@ class _AddCompanyState extends ConsumerState<AddCompany> {
                         ElevatedButton(
                             onPressed: () {
                               if (_counterKey.currentState!.validate()) {
-                                // If the form is valid, display a snackbar. In the real world,
-                                // you'd often call a server or save the information in a database.
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text(
-                                          '${_counterController.text} ETAR kód rögzítve')),
-                                );
+                                final counter = ref
+                                    .read(firestoreRepositoryProvider)
+                                    .oneCounter(_counterController.text);
+                                counter.then((value) {
+                                  if (value.counter == 0) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          duration: const Duration(seconds: 6),
+                                          content: Text(
+                                              '${_counterController.text} Hibás ETAR kód, próbáld meg még egyszer!')),
+                                    );
+                                  } else {
+                                    addUsers(value.company, 'entrant');
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          duration: const Duration(seconds: 7),
+                                          content: Text(
+                                              '${_counterController.text} ETAR kód alapján ${value.company} céghez ${widget.user.displayName} rögzítve')),
+                                    );
+                                  }
+                                });
                               }
                             },
                             child: const Text('Rögzítés'))

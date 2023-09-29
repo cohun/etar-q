@@ -125,7 +125,7 @@ class UsersListView extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text('Még nem választottál céget!'),
+                        const Text('Még nem választottál céget!'),
                         FloatingActionButton(
                           heroTag: 'btn2',
                           child: const Icon(Icons.add),
