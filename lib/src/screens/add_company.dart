@@ -43,6 +43,14 @@ class _AddCompanyState extends ConsumerState<AddCompany> {
           counter: counter, company: company, address: address);
     }
 
+    void addUsers(String company) {
+      firestoreRepository.addUsers(
+          uid: widget.user.uid,
+          company: company,
+          name: widget.user.displayName!,
+          role: 'super');
+    }
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -55,10 +63,11 @@ class _AddCompanyState extends ConsumerState<AddCompany> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
                     widget.user.displayName!,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w500),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -83,7 +92,7 @@ class _AddCompanyState extends ConsumerState<AddCompany> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   child: Form(
                     key: _compKey,
                     child: Column(
@@ -133,6 +142,7 @@ class _AddCompanyState extends ConsumerState<AddCompany> {
                                             value.docs[0].data().counter,
                                             _companyController.text,
                                             _addressController.text));
+                                    addUsers(_companyController.text);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                           content: Text(

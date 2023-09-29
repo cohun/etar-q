@@ -130,8 +130,11 @@ class UsersListView extends ConsumerWidget {
                           heroTag: 'btn2',
                           child: const Icon(Icons.add),
                           onPressed: () {
-                            context.goNamed(AppRoute.addCompany.name,
-                                extra: user);
+                            if (user.displayName != null) {
+                              context.goNamed(AppRoute.addCompany.name,
+                                  extra: user);
+                            }
+
                             // final user = ref.read(firebaseAuthProvider).currentUser;
                             // ref.read(firestoreRepositoryProvider).addUsers(uid: user!.uid, company: 'company2',
                             // name: user.displayName.toString());
