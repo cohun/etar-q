@@ -4,6 +4,7 @@ import 'package:etar_q/src/data/users.dart';
 import 'package:etar_q/src/routing/app_router.dart';
 import 'package:etar_q/src/utils/cards.dart';
 import 'package:etar_q/src/utils/dropdown.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 
 import 'package:flutter/material.dart';
@@ -23,32 +24,6 @@ class HomeScreen extends ConsumerWidget {
         )
       ]),
       body: const UsersListView(),
-      // floatingActionButton: Row(
-      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      //   children: [
-      //     TextButton(
-      //                 child: const Text('BUY TICKETS'),
-      //                 onPressed: () {/* ... */},
-      //               ),
-      //     FloatingActionButton(
-      //       heroTag: 'btn1',
-      //       child: const Icon(Icons.add),
-      //       onPressed: () {
-      //         final user = ref.read(firebaseAuthProvider).currentUser;
-      //         ref.read(firestoreRepositoryProvider).addUsers(uid: user!.uid, company: 'company',
-      //         name: user.displayName.toString());
-      //       },
-      //     ),
-      //     FloatingActionButton(
-      //       heroTag: 'btn2',
-      //       child: const Icon(Icons.add),
-      //       onPressed: () {
-
-      //         ref.read(firestoreRepositoryProvider).addCounter(counter: "11201", company: "H-ITB Kft.", address: "1119 Budapest Kelenvölgyi htsr. 5");
-      //       },
-      //     ),
-      //   ],
-      // ),
     );
   }
 }
@@ -125,15 +100,31 @@ class UsersListView extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Text('Még nem választottál céget!'),
+                        Text.rich(
+                          const TextSpan(
+                              text:
+                                  "A saját fiók beállításokban (jobboldalt fent ikon) tudod a felhasználói nevedet megadni"),
+                          style: TextStyle(color: Colors.amber.shade800),
+                          textAlign: TextAlign.center,
+                        ),
+                        const Text('Csak ezután válassz céget!'),
                         FloatingActionButton(
                           heroTag: 'btn2',
                           child: const Icon(Icons.add),
                           onPressed: () {
-                            if (user.displayName != null) {
-                              context.goNamed(AppRoute.addCompany.name,
-                                  extra: user);
-                            }
+                            ref
+                                .read(firebaseAuthProvider)
+                                .idTokenChanges()
+                                .listen(
+                              (User? user) {
+                                if (user!.displayName == null) {
+                                  print('User is currently signed out!');
+                                } else {
+                                  context.goNamed(AppRoute.addCompany.name,
+                                      extra: user);
+                                }
+                              },
+                            );
 
                             // final user = ref.read(firebaseAuthProvider).currentUser;
                             // ref.read(firestoreRepositoryProvider).addUsers(uid: user!.uid, company: 'company2',
