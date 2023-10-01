@@ -23,7 +23,7 @@ class FirestoreRepository {
       required String company,
       required String name,
       String role = "entrant",
-      String approvedRole = "entrant"}) async {
+      String approvedRole = "elbírálás alatt"}) async {
     final docRef = _firestore.collection('users').doc(uid);
     await docRef.set({
       'uid': uid,
@@ -42,10 +42,13 @@ class FirestoreRepository {
     await docRef.update({'approvedRole': approvedRole});
   }
 
-  Query<Users> usersQuery() {
-    return _firestore.collection('users').withConverter(
-        fromFirestore: (snapshot, _) => Users.fromMap(snapshot.data()!),
-        toFirestore: (users, _) => users.toMap());
+  Query<Users> usersQuery(String company) {
+    return _firestore
+        .collection('users')
+        .where('company', isEqualTo: company)
+        .withConverter(
+            fromFirestore: (snapshot, _) => Users.fromMap(snapshot.data()!),
+            toFirestore: (users, _) => users.toMap());
   }
 
   Future<Users> oneUserQuery(String uid) async {

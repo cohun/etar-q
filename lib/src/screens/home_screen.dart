@@ -117,8 +117,13 @@ class UsersListView extends ConsumerWidget {
                                 .idTokenChanges()
                                 .listen(
                               (User? user) {
-                                if (user!.displayName == null) {
-                                  print('User is currently signed out!');
+                                if (user?.displayName == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        duration: Duration(seconds: 6),
+                                        content: Text(
+                                            'Kattints először jobbra fent a fiók ikonra és töltsd ki a felhasználói neved!')),
+                                  );
                                 } else {
                                   context.goNamed(AppRoute.addCompany.name,
                                       extra: user);
@@ -148,7 +153,7 @@ class UsersListView extends ConsumerWidget {
                       const Text("Összes felhasználó:"),
                       Expanded(
                         child: FirestoreListView<Users>(
-                          query: firestoreRepository.usersQuery(),
+                          query: firestoreRepository.usersQuery(data.company),
                           itemBuilder: (BuildContext context,
                               QueryDocumentSnapshot<Users> doc) {
                             if (!doc.exists) {

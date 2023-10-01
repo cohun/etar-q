@@ -11,13 +11,17 @@ class Dropdown extends StatefulWidget {
 }
 
 class _DropdownState extends State<Dropdown> {
-  final List<String> items = [
+  final List<String> items0 = [
+    'elbírálás alatt',
+    'jogosultság osztó',
+    'hyper',
+    'hyperSuper',
+  ];
+
+  final List<String> items1 = [
     'elbírálás alatt',
     'olvasási jogosultság',
     'adminisztrátor',
-    'superSuper',
-    'hyper',
-    'hyperSuper',
   ];
   String? selectedValue;
 
@@ -51,20 +55,35 @@ class _DropdownState extends State<Dropdown> {
                 ),
               ],
             ),
-            items: items
-                .map((String item) => DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ))
-                .toList(),
+            items: widget.users.role == 'hyperSuper'
+                ? items0
+                    .map((String item) => DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(
+                            item,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ))
+                    .toList()
+                : items1
+                    .map((String item) => DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(
+                            item,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ))
+                    .toList(),
             value: selectedValue,
             onChanged: (String? value) {
               setState(() {
