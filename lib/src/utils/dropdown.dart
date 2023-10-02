@@ -16,12 +16,14 @@ class _DropdownState extends State<Dropdown> {
     'jogosultság osztó',
     'hyper',
     'hyperSuper',
+    'felhasználó törlése'
   ];
 
   final List<String> items1 = [
     'elbírálás alatt',
     'olvasási jogosultság',
     'adminisztrátor',
+    'felhasználó törlése'
   ];
   String? selectedValue;
 

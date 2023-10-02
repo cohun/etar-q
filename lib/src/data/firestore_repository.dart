@@ -42,6 +42,16 @@ class FirestoreRepository {
     await docRef.update({'approvedRole': approvedRole});
   }
 
+  Future<void> deleteUsers({
+    required String uid,
+  }) async {
+    final docRef = _firestore.doc('users/$uid');
+    await docRef.delete().then(
+          (doc) => print("Document deleted"),
+          onError: (e) => print("Error updating document $e"),
+        );
+  }
+
   Query<Users> usersQuery(String company) {
     return _firestore
         .collection('users')

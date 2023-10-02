@@ -40,33 +40,48 @@ class UsersListView extends ConsumerWidget {
         return AlertDialog(
           title: Text("${users.name} jogosultsága"),
           content: SizedBox(
-              width: 200,
-              height: 40,
-              child: Dropdown(
-                users: users,
-                valueDrop: getValue,
-              )),
+            width: 200,
+            height: 40,
+            child: users.role == 'super'
+                ? const Text('Te vagy a jogosultság osztó')
+                : Dropdown(
+                    users: users,
+                    valueDrop: getValue,
+                  ),
+          ),
           actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                MaterialButton(
-                  child: const Text("Mégse"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                MaterialButton(
-                  child: const Text("OK"),
-                  onPressed: () {
-                    ref
-                        .read(firestoreRepositoryProvider)
-                        .updateUsers(uid: users.uid, approvedRole: roleBack);
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
+            users.role == 'super'
+                ? MaterialButton(
+                    child: const Text("OK"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      MaterialButton(
+                        child: const Text("Mégse"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      MaterialButton(
+                        child: const Text("OK"),
+                        onPressed: () {
+                          roleBack == "felhasználó törlése"
+                              ? ref
+                                  .read(firestoreRepositoryProvider)
+                                  .deleteUsers(uid: users.uid)
+                              : ref
+                                  .read(firestoreRepositoryProvider)
+                                  .updateUsers(
+                                      uid: users.uid, approvedRole: roleBack);
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ),
           ],
         );
       },
@@ -187,7 +202,10 @@ class UsersListView extends ConsumerWidget {
                                   title: Text(users.name),
                                   subtitle: Text(users.approvedRole),
                                   onTap: () {
-                                    _showDialog(context, users, ref);
+                                    if (data.role == 'super' ||
+                                        data.role == 'hyperSuper') {
+                                      _showDialog(context, users, ref);
+                                    }
                                   },
                                 ),
                                 const Divider(
