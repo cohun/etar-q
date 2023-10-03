@@ -23,7 +23,28 @@ class HomeScreen extends ConsumerWidget {
           onPressed: () => context.goNamed(AppRoute.profile.name),
         )
       ]),
-      body: const UsersListView(),
+      body: const SingleChildScrollView(child: UsersListView()),
+      bottomNavigationBar: BottomNavigationBar(
+        iconSize: 40,
+        selectedFontSize: 20,
+        selectedIconTheme: IconThemeData(color: Colors.amberAccent, size: 40),
+        selectedItemColor: Colors.amberAccent,
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.precision_manufacturing),
+            label: 'Termékek',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.track_changes),
+            label: 'NFC',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.barcode_reader),
+            label: 'QR +vonalkód',
+          ),
+        ],
+      ),
     );
   }
 }
