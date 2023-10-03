@@ -42,22 +42,28 @@ class Cards extends StatelessWidget {
                 ),
 
                 ListTile(
+                  titleAlignment: ListTileTitleAlignment.threeLine,
                   leading: const Icon(Icons.factory),
+                  trailing: const SizedBox(width: 30),
                   subtitle: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const SizedBox(
                         height: 10,
                       ),
                       Text(
                         "Cég ETAR kód: $counter",
-                        style: const TextStyle(fontSize: 8),
+                        style: const TextStyle(fontSize: 11),
                       ),
                     ],
                   ),
                   title: Column(
                     children: [
                       Text(company),
-                      Text(address),
+                      Text(
+                        address,
+                        style: const TextStyle(fontSize: 12),
+                      ),
                     ],
                   ),
                 ),

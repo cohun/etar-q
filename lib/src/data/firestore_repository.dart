@@ -89,6 +89,21 @@ class FirestoreRepository {
     }
   }
 
+  Future<Counter> counterCompany(String company) async {
+    final ref = _firestore
+        .collection('counter')
+        .where('company', isEqualTo: company)
+        .withConverter(
+            fromFirestore: (snapshot, _) => Counter.fromMap(snapshot.data()!),
+            toFirestore: (counter, _) => counter.toMap());
+    final docSnap = await ref.get();
+    if (docSnap.docs.isEmpty) {
+      return const Counter(counter: 0, company: '', address: '');
+    } else {
+      return docSnap.docs.first.data();
+    }
+  }
+
   Query<Counter> countCounter() {
     return _firestore
         .collection('counter')

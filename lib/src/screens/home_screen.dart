@@ -145,10 +145,6 @@ class UsersListView extends ConsumerWidget {
                                 }
                               },
                             );
-
-                            // final user = ref.read(firebaseAuthProvider).currentUser;
-                            // ref.read(firestoreRepositoryProvider).addUsers(uid: user!.uid, company: 'company2',
-                            // name: user.displayName.toString());
                           },
                         ),
                       ],
@@ -156,12 +152,37 @@ class UsersListView extends ConsumerWidget {
                   );
                 }
                 Users data = snapshot.data as Users;
+                final oneCounter = ref
+                    .read(firestoreRepositoryProvider)
+                    .counterCompany(data.company)
+                    .then((value) {
+                  return value;
+                });
+
                 return SizedBox(
                   height: MediaQuery.of(context).size.height * 0.8,
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Cards(name: '${user.displayName}', company: data.company),
+                      FutureBuilder(
+                          future: oneCounter,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return const Text(
+                                "Something went wrong",
+                              );
+                            }
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              return Cards(
+                                  name: '${user.displayName}',
+                                  company: data.company,
+                                  address: snapshot.data!.address,
+                                  counter: snapshot.data!.counter.toString());
+                            }
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }),
                       const SizedBox(
                         height: 10,
                       ),

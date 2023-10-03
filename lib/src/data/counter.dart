@@ -13,7 +13,7 @@ class Counter extends Equatable {
 
   factory Counter.fromMap(Map<String, dynamic> map) {
     return Counter(
-      counter: map['counter'] ?? '',
+      counter: map['counter'] ?? 0,
       address: map['address'] ?? '',
       company: map['company'] ?? '',
     );
