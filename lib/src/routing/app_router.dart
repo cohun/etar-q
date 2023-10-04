@@ -3,6 +3,7 @@ import 'package:etar_q/src/screens/add_company.dart';
 import 'package:etar_q/src/screens/custom_profile_screen.dart';
 import 'package:etar_q/src/screens/custom_sign_in_screen.dart';
 import 'package:etar_q/src/screens/home_screen.dart';
+import 'package:etar_q/src/utils/navbar_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,6 +14,7 @@ enum AppRoute {
   home,
   profile,
   addCompany,
+  bottom,
 }
 
 final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
@@ -47,7 +49,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/home',
         name: AppRoute.home.name,
-        builder: (context, state) => const HomeScreen(),
+        builder: (context, state) => const BottomNavigation(),
         routes: [
           GoRoute(
             path: 'profile',

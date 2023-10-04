@@ -1,3 +1,4 @@
+import 'package:etar_q/src/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavigation extends StatefulWidget {
@@ -9,19 +10,29 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation> {
   int _selectedIndex = 0;
+  bool isVisible = false;
+  setBottombarVisible(String approvedRole) {
+    if (approvedRole != 'elbírálás alatt') {
+      setState(() {
+        isVisible = true;
+      });
+    }
+  }
+
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
+    HomeScreen(),
     Text(
-      'Index 0: Home',
+      'Index 1: Termékek',
       style: optionStyle,
     ),
     Text(
-      'Index 1: Business',
+      'Index 2: NFC',
       style: optionStyle,
     ),
     Text(
-      'Index 2: School',
+      'Index 3: QR kód',
       style: optionStyle,
     ),
   ];
@@ -35,9 +46,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('BottomNavigationBar Sample'),
-      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
@@ -45,7 +53,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Felhasználók',
+            label: 'Kezdőlap',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.precision_manufacturing),
@@ -62,6 +70,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
+        unselectedItemColor: Colors.blueGrey,
         onTap: _onItemTapped,
       ),
     );
