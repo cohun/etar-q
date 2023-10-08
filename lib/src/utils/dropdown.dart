@@ -39,7 +39,7 @@ class _DropdownState extends State<Dropdown> {
                 const Icon(
                   Icons.list,
                   size: 16,
-                  color: Colors.yellow,
+                  color: Colors.limeAccent,
                 ),
                 const SizedBox(
                   width: 4,
@@ -50,14 +50,14 @@ class _DropdownState extends State<Dropdown> {
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: Colors.yellow,
+                      color: Colors.limeAccent,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
             ),
-            items: widget.users.role == 'hyperSuper'
+            items: widget.users.role == 'super'
                 ? items0
                     .map((String item) => DropdownMenuItem<String>(
                           value: item,
@@ -102,7 +102,7 @@ class _DropdownState extends State<Dropdown> {
                 border: Border.all(
                   color: Colors.black26,
                 ),
-                color: Colors.blueGrey.shade600,
+                color: Colors.blueGrey.shade800,
               ),
               elevation: 2,
             ),
@@ -111,7 +111,7 @@ class _DropdownState extends State<Dropdown> {
                 Icons.arrow_forward_ios_outlined,
               ),
               iconSize: 14,
-              iconEnabledColor: Colors.yellow,
+              iconEnabledColor: Colors.limeAccent,
               iconDisabledColor: Colors.grey,
             ),
             dropdownStyleData: DropdownStyleData(

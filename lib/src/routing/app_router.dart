@@ -3,8 +3,10 @@ import 'package:etar_q/src/screens/add_company.dart';
 import 'package:etar_q/src/screens/custom_profile_screen.dart';
 import 'package:etar_q/src/screens/custom_sign_in_screen.dart';
 import 'package:etar_q/src/screens/home_screen.dart';
+import 'package:etar_q/src/utils/company_list.dart';
 import 'package:etar_q/src/utils/navbar_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -14,7 +16,7 @@ enum AppRoute {
   home,
   profile,
   addCompany,
-  bottom,
+  companies,
 }
 
 final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
@@ -65,6 +67,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                 user: user,
               );
             },
+          ),
+          GoRoute(
+            path: 'companies',
+            name: AppRoute.companies.name,
+            builder: (context, state) => const CompanyList(),
           ),
         ],
       ),

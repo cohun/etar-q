@@ -40,7 +40,6 @@ class Cards extends StatelessWidget {
                 const Divider(
                   height: 20.0,
                 ),
-
                 ListTile(
                   titleAlignment: ListTileTitleAlignment.threeLine,
                   leading: const Icon(Icons.factory),
@@ -59,7 +58,10 @@ class Cards extends StatelessWidget {
                   ),
                   title: Column(
                     children: [
-                      Text(company),
+                      Text(
+                        company,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
                       Text(
                         address,
                         style: const TextStyle(fontSize: 12),
@@ -67,22 +69,6 @@ class Cards extends StatelessWidget {
                     ],
                   ),
                 ),
-
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.end,
-                //   children: <Widget>[
-                //     TextButton(
-                //       child: const Text('BUY TICKETS'),
-                //       onPressed: () {/* ... */},
-                //     ),
-                //     const SizedBox(width: 8),
-                //     TextButton(
-                //       child: const Text('LISTEN'),
-                //       onPressed: () {/* ... */},
-                //     ),
-                //     const SizedBox(width: 8),
-                //   ],
-                // ),
               ],
             ),
           ),

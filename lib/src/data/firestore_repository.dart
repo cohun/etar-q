@@ -34,12 +34,15 @@ class FirestoreRepository {
     });
   }
 
-  Future<void> updateUsers({
-    required String uid,
-    required String approvedRole,
-  }) async {
+  Future<void> updateUsers(
+      {required String uid,
+      required String approvedRole,
+      String company = ''}) async {
     final docRef = _firestore.doc('users/$uid');
     await docRef.update({'approvedRole': approvedRole});
+    if (company != '') {
+      await docRef.update({'company': company});
+    }
   }
 
   Future<void> deleteUsers({
@@ -61,6 +64,25 @@ class FirestoreRepository {
             toFirestore: (users, _) => users.toMap());
   }
 
+  Stream<QuerySnapshot<Users>> usersStream(String company) {
+    return _firestore
+        .collection('users')
+        .where('company', isEqualTo: company)
+        .withConverter(
+            fromFirestore: (snapshot, _) => Users.fromMap(snapshot.data()!),
+            toFirestore: (users, _) => users.toMap())
+        .snapshots();
+  }
+
+  Query<Users> superUsers() {
+    return _firestore
+        .collection('users')
+        .where('role', isEqualTo: 'super')
+        .withConverter(
+            fromFirestore: (snapshot, _) => Users.fromMap(snapshot.data()!),
+            toFirestore: (users, _) => users.toMap());
+  }
+
   Future<Users> oneUserQuery(String uid) async {
     final ref = _firestore.collection('users').doc(uid).withConverter(
         fromFirestore: (snapshot, _) => Users.fromMap(snapshot.data()!),
@@ -71,6 +93,18 @@ class FirestoreRepository {
       return oneUser!;
     }
     return Users(uid: uid, name: '', company: '', role: '', approvedRole: '');
+  }
+
+  Stream<DocumentSnapshot<Users>> oneUserStream(String uid) {
+    return _firestore
+        .collection('users')
+        .doc(uid)
+        .withConverter(
+            fromFirestore: (snapshot, _) => Users.fromMap(snapshot.data()!),
+            toFirestore: (users, _) => users.toMap())
+        .snapshots();
+
+    // return Users(uid: uid, name: '', company: '', role: '', approvedRole: '');
   }
 
   Future<bool> isCompany(String company) async {
@@ -124,6 +158,12 @@ class FirestoreRepository {
       return oneCounter!;
     }
     return const Counter(counter: 0, company: '', address: '');
+  }
+
+  Query<Counter> allCounter() {
+    return _firestore.collection('counter').orderBy('company').withConverter(
+        fromFirestore: (snapshot, _) => Counter.fromMap(snapshot.data()!),
+        toFirestore: (counter, _) => counter.toMap());
   }
 }
 

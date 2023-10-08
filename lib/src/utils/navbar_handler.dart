@@ -39,10 +39,11 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
     final user = ref.read(firebaseAuthProvider).currentUser;
     void tapped(int index) {
       firestoreRepository.oneUserQuery(user!.uid).then(
-            (value) => value.approvedRole == 'elbírálás alatt'
+            (value) => value.approvedRole == 'elbírálás alatt' ||
+                    value.role == ''
                 ? ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                        content: Text('Jelenleg nincs jogosultságod!')),
+                        content: Text('Jelenleg nincs ehhez jogosultságod!')),
                   )
                 : setState(() {
                     _selectedIndex = index;
