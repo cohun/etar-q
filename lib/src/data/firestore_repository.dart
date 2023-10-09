@@ -95,14 +95,12 @@ class FirestoreRepository {
     return Users(uid: uid, name: '', company: '', role: '', approvedRole: '');
   }
 
-  Stream<DocumentSnapshot<Users>> oneUserStream(String uid) {
-    return _firestore
-        .collection('users')
-        .doc(uid)
-        .withConverter(
-            fromFirestore: (snapshot, _) => Users.fromMap(snapshot.data()!),
-            toFirestore: (users, _) => users.toMap())
-        .snapshots();
+  Stream<Users?> oneUserStream(String uid) {
+    final ref = _firestore.collection('users').doc(uid).withConverter(
+          fromFirestore: (snapshot, _) => Users.fromMap(snapshot.data()!),
+          toFirestore: (users, _) => users.toMap(),
+        );
+    return ref.snapshots().map((snapshot) => snapshot.data());
 
     // return Users(uid: uid, name: '', company: '', role: '', approvedRole: '');
   }

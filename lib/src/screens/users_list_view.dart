@@ -4,6 +4,7 @@ import 'package:etar_q/src/data/users.dart';
 import 'package:etar_q/src/routing/app_router.dart';
 import 'package:etar_q/src/utils/cards.dart';
 import 'package:etar_q/src/utils/dropdown.dart';
+import 'package:etar_q/src/utils/test_users_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
@@ -77,19 +78,19 @@ class UsersListView extends ConsumerWidget {
     final user = ref.read(firebaseAuthProvider).currentUser;
 
     final oneUser =
-        ref.read(firestoreRepositoryProvider).oneUserQuery(user!.uid);
+        ref.watch(firestoreRepositoryProvider).oneUserStream(user!.uid);
 
     return Column(
       children: [
-        FutureBuilder(
-            future: oneUser,
+        StreamBuilder(
+            stream: oneUser,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return const Text(
                   "Something went wrong",
                 );
               }
-              if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.connectionState != ConnectionState.waiting) {
                 if (snapshot.data!.company == '') {
                   return SizedBox(
                     height: 300,
@@ -157,6 +158,7 @@ class UsersListView extends ConsumerWidget {
                             }
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
+                              const UserInformation();
                               return Cards(
                                   name: '${user.displayName}',
                                   company: data.company,
