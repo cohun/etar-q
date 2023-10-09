@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:etar_q/src/data/counter.dart';
 import 'package:etar_q/src/data/users.dart';
@@ -101,8 +103,6 @@ class FirestoreRepository {
           toFirestore: (users, _) => users.toMap(),
         );
     return ref.snapshots().map((snapshot) => snapshot.data());
-
-    // return Users(uid: uid, name: '', company: '', role: '', approvedRole: '');
   }
 
   Future<bool> isCompany(String company) async {
@@ -136,6 +136,17 @@ class FirestoreRepository {
     }
   }
 
+  StreamSubscription<QuerySnapshot<Counter>> counterCompanyStream(
+      String company) {
+    final ref = _firestore
+        .collection('counter')
+        .where('company', isEqualTo: company)
+        .withConverter(
+            fromFirestore: (snapshot, _) => Counter.fromMap(snapshot.data()!),
+            toFirestore: (counter, _) => counter.toMap());
+    return ref.snapshots().listen((snapshot) => snapshot.docs.first);
+  }
+
   Query<Counter> countCounter() {
     return _firestore
         .collection('counter')
@@ -156,6 +167,14 @@ class FirestoreRepository {
       return oneCounter!;
     }
     return const Counter(counter: 0, company: '', address: '');
+  }
+
+  Stream<Counter?> oneCounterStream(String counter) {
+    final ref = _firestore.collection('counter').doc(counter).withConverter(
+          fromFirestore: (snapshot, _) => Counter.fromMap(snapshot.data()!),
+          toFirestore: (counter, _) => counter.toMap(),
+        );
+    return ref.snapshots().map((snapshot) => snapshot.data());
   }
 
   Query<Counter> allCounter() {

@@ -6,7 +6,6 @@ import 'package:etar_q/src/routing/app_router.dart';
 import 'package:etar_q/src/screens/home_screen.dart';
 import 'package:etar_q/src/screens/users_list_view.dart';
 import 'package:etar_q/src/utils/navbar_handler.dart';
-import 'package:etar_q/src/utils/test_users_list.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -82,7 +81,6 @@ class CompanyList extends ConsumerWidget {
                       uid: uid,
                       approvedRole: data.approvedRole,
                       company: companies.company);
-                  const UserInformation();
                   context.goNamed(AppRoute.home.name);
                   // Navigator.of(context).push(MaterialPageRoute(
                   //   builder: (context) => const HomeScreen(),

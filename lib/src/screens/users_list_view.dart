@@ -4,7 +4,6 @@ import 'package:etar_q/src/data/users.dart';
 import 'package:etar_q/src/routing/app_router.dart';
 import 'package:etar_q/src/utils/cards.dart';
 import 'package:etar_q/src/utils/dropdown.dart';
-import 'package:etar_q/src/utils/test_users_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
@@ -83,6 +82,12 @@ class UsersListView extends ConsumerWidget {
     return Column(
       children: [
         StreamBuilder(
+            initialData: Users(
+                uid: user.uid,
+                name: '',
+                company: '',
+                role: '',
+                approvedRole: ''),
             stream: oneUser,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
@@ -91,7 +96,7 @@ class UsersListView extends ConsumerWidget {
                 );
               }
               if (snapshot.connectionState != ConnectionState.waiting) {
-                if (snapshot.data!.company == '') {
+                if (snapshot.data?.company == '' || !snapshot.hasData) {
                   return SizedBox(
                     height: 300,
                     width: MediaQuery.of(context).size.width,
@@ -137,11 +142,14 @@ class UsersListView extends ConsumerWidget {
                 }
                 Users data = snapshot.data as Users;
                 final oneCounter = ref
-                    .read(firestoreRepositoryProvider)
+                    .watch(firestoreRepositoryProvider)
                     .counterCompany(data.company)
                     .then((value) {
                   return value;
                 });
+                final oneCounterStream = ref
+                    .watch(firestoreRepositoryProvider)
+                    .counterCompanyStream(data.company);
 
                 return SizedBox(
                   height: MediaQuery.of(context).size.height * 0.8,
@@ -158,7 +166,6 @@ class UsersListView extends ConsumerWidget {
                             }
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
-                              const UserInformation();
                               return Cards(
                                   name: '${user.displayName}',
                                   company: data.company,
@@ -208,8 +215,6 @@ class UsersListView extends ConsumerWidget {
 
   Expanded companyUsers(
       FirestoreRepository firestoreRepository, Users data, WidgetRef ref) {
-    print(data.company);
-
     return Expanded(
       child: FirestoreListView<Users>(
         query: firestoreRepository.usersQuery(data.company),
