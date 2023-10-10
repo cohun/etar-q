@@ -263,7 +263,8 @@ class UsersListView extends ConsumerWidget {
                           },
                         ),
               users.approvedRole == 'hyper' ||
-                      users.approvedRole == 'hyperSuper'
+                      users.approvedRole == 'hyperSuper' ||
+                      users.approvedRole == 'superSuper'
                   ? const SizedBox.shrink()
                   : const Divider(
                       color: Colors.black45,
