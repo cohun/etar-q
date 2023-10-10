@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:etar_q/src/data/counter.dart';
 import 'package:etar_q/src/data/firestore_repository.dart';
 import 'package:etar_q/src/data/users.dart';
 import 'package:etar_q/src/routing/app_router.dart';
@@ -156,21 +157,26 @@ class UsersListView extends ConsumerWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      FutureBuilder(
-                          future: oneCounter,
+                      StreamBuilder(
+                          stream: oneCounterStream,
                           builder: (context, snapshot) {
                             if (snapshot.hasError) {
                               return const Text(
                                 "Something went wrong",
                               );
                             }
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
+                            if (snapshot.connectionState !=
+                                    ConnectionState.waiting ||
+                                snapshot.hasData) {
                               return Cards(
                                   name: '${user.displayName}',
                                   company: data.company,
-                                  address: snapshot.data!.address,
-                                  counter: snapshot.data!.counter.toString());
+                                  address: snapshot.data!.isNotEmpty
+                                      ? snapshot.data!.single.address
+                                      : '',
+                                  counter: snapshot.data!.isNotEmpty
+                                      ? snapshot.data!.single.counter.toString()
+                                      : "");
                             }
                             return const Center(
                                 child: CircularProgressIndicator());
@@ -226,7 +232,8 @@ class UsersListView extends ConsumerWidget {
           return Column(
             children: [
               users.approvedRole == 'hyper' ||
-                      users.approvedRole == 'hyperSuper'
+                      users.approvedRole == 'hyperSuper' ||
+                      users.approvedRole == 'superSuper'
                   ? const SizedBox.shrink()
                   : users.approvedRole == 'elbírálás alatt'
                       ? ListTile(

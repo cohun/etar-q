@@ -136,15 +136,16 @@ class FirestoreRepository {
     }
   }
 
-  StreamSubscription<QuerySnapshot<Counter>> counterCompanyStream(
-      String company) {
+  Stream<List<Counter>> counterCompanyStream(String company) {
     final ref = _firestore
         .collection('counter')
         .where('company', isEqualTo: company)
         .withConverter(
             fromFirestore: (snapshot, _) => Counter.fromMap(snapshot.data()!),
             toFirestore: (counter, _) => counter.toMap());
-    return ref.snapshots().listen((snapshot) => snapshot.docs.first);
+
+    return ref.snapshots().map((snapshot) =>
+        snapshot.docs.map((docsSnapshot) => docsSnapshot.data()).toList());
   }
 
   Query<Counter> countCounter() {
