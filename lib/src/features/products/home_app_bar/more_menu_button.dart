@@ -9,8 +9,9 @@ enum PopupMenuOption {
 }
 
 class MoreMenuButton extends StatelessWidget {
-  const MoreMenuButton({super.key, this.user});
-  final AppUser? user;
+  const MoreMenuButton({
+    super.key,
+  });
 
   // * Keys for testing using find.byKey()
   static const signInKey = Key('menuSignIn');
@@ -24,26 +25,18 @@ class MoreMenuButton extends StatelessWidget {
       icon: const Icon(Icons.more_vert),
       itemBuilder: (_) {
         // show all the options based on conditional logic
-        return user != null
-            ? <PopupMenuEntry<PopupMenuOption>>[
-                PopupMenuItem(
-                  key: ordersKey,
-                  value: PopupMenuOption.orders,
-                  child: Text('Orders'),
-                ),
-                PopupMenuItem(
-                  key: accountKey,
-                  value: PopupMenuOption.account,
-                  child: Text('Account'),
-                ),
-              ]
-            : <PopupMenuEntry<PopupMenuOption>>[
-                PopupMenuItem(
-                  key: signInKey,
-                  value: PopupMenuOption.signIn,
-                  child: Text('Sign In'),
-                ),
-              ];
+        return <PopupMenuEntry<PopupMenuOption>>[
+          const PopupMenuItem(
+            key: ordersKey,
+            value: PopupMenuOption.orders,
+            child: Text('Orders'),
+          ),
+          const PopupMenuItem(
+            key: accountKey,
+            value: PopupMenuOption.account,
+            child: Text('Account'),
+          ),
+        ];
       },
       onSelected: (option) {
         // push to different routes based on selected option

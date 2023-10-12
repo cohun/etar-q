@@ -5,7 +5,6 @@ import 'package:etar_q/src/features/products/home_app_bar/shopping_cart_icon.dar
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 /// Custom [AppBar] widget that is reused by the [ProductsListScreen] and
 /// [ProductScreen].
@@ -28,14 +27,14 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     if (screenWidth < Breakpoint.tablet) {
       return AppBar(
-        title: Text('My Shop'),
-        actions: [
-          const ShoppingCartIcon(),
+        title: const Text('Termékek'),
+        actions: const [
+          ShoppingCartIcon(),
         ],
       );
     } else {
       return AppBar(
-        title: Text('My Shop'),
+        title: const Text('Termékek'),
         actions: [
           const ShoppingCartIcon(),
           ActionTextButton(

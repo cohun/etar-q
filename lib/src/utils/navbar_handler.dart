@@ -1,3 +1,4 @@
+import 'package:etar_q/src/features/products/products_list/products_list_screen.dart';
 import 'package:etar_q/src/routing/app_router.dart';
 import 'package:etar_q/src/screens/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -19,10 +20,7 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    Text(
-      'Index 1: Termékek',
-      style: optionStyle,
-    ),
+    ProductsListScreen(),
     Text(
       'Index 2: NFC',
       style: optionStyle,
