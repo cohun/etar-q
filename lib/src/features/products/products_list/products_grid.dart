@@ -11,7 +11,7 @@ class ProductGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ProductsLayoutGrid(
-      itemCount: 2,
+      itemCount: 7,
       itemBuilder: (_, index) {
         return ProductCard(
           onPressed: () {},
@@ -41,7 +41,7 @@ class ProductsLayoutGrid extends StatelessWidget {
       final width = constraints.maxWidth;
       // 1 column for width < 500px
       // then add one more column for each 250px
-      final crossAxisCount = max(1, width ~/ 180);
+      final crossAxisCount = max(1, width ~/ 185);
       // once the crossAxisCount is known, calculate the column and row sizes
       // set some flexible track sizes based on the crossAxisCount with 1.fr
       final columnSizes = List.generate(crossAxisCount, (_) => 1.fr);

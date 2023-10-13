@@ -24,7 +24,7 @@ class ProductCard extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const CustomImage(imageUrl: 'assets/images/manlifteq.jpeg'),
+              const CustomImage(imageUrl: 'assets/images/manlifteq1.jpg'),
               gapH8,
               const Divider(),
               gapH8,
