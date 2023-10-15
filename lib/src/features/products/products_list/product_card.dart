@@ -1,13 +1,19 @@
-import 'package:etar_q/src/common_widgets/custom_image.dart';
-import 'package:etar_q/src/constants/app_sizes.dart';
-import 'package:etar_q/src/data/models/product_model.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:etar_q/src/common_widgets/custom_image.dart';
+import 'package:etar_q/src/constants/app_sizes.dart';
+import 'package:etar_q/src/data/models/product_category.dart';
+
 /// Used to show a single product inside a card.
 class ProductCard extends ConsumerWidget {
-  const ProductCard({super.key, this.onPressed});
-
+  const ProductCard({
+    super.key,
+    required this.category,
+    this.onPressed,
+  });
+  final Category category;
   final VoidCallback? onPressed;
 
   // * Keys for testing using find.byKey()
@@ -24,12 +30,13 @@ class ProductCard extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const CustomImage(imageUrl: 'assets/images/manlifteq1.jpg'),
+              CustomImage(
+                imageUrl: category.address,
+              ),
               gapH8,
               const Divider(),
               gapH8,
-              Text('Emelőszerkezetek',
-                  style: Theme.of(context).textTheme.bodySmall),
+              Text(category.name, style: const TextStyle(fontSize: 11)),
             ],
           ),
         ),

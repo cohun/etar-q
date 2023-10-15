@@ -1,21 +1,23 @@
 import 'dart:math';
 
 import 'package:etar_q/src/constants/app_sizes.dart';
+import 'package:etar_q/src/constants/product_categories.dart';
+import 'package:etar_q/src/data/models/product_category.dart';
 import 'package:etar_q/src/features/products/products_list/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProductGrid extends StatelessWidget {
-  const ProductGrid({super.key});
+class ProductsGrid extends ConsumerWidget {
+  const ProductsGrid({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ProductsLayoutGrid(
-      itemCount: 7,
+      itemCount: categories.length,
       itemBuilder: (_, index) {
-        return ProductCard(
-          onPressed: () {},
-        );
+        final category = categories[index];
+        return ProductCard(category: category, onPressed: () {});
       },
     );
   }
@@ -41,7 +43,7 @@ class ProductsLayoutGrid extends StatelessWidget {
       final width = constraints.maxWidth;
       // 1 column for width < 500px
       // then add one more column for each 250px
-      final crossAxisCount = max(1, width ~/ 185);
+      final crossAxisCount = max(1, width ~/ 175);
       // once the crossAxisCount is known, calculate the column and row sizes
       // set some flexible track sizes based on the crossAxisCount with 1.fr
       final columnSizes = List.generate(crossAxisCount, (_) => 1.fr);

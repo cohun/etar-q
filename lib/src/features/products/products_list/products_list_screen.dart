@@ -1,5 +1,6 @@
 import 'package:etar_q/src/common_widgets/responsive_center.dart';
 import 'package:etar_q/src/constants/app_sizes.dart';
+import 'package:etar_q/src/constants/product_categories.dart';
 import 'package:etar_q/src/features/products/home_app_bar/home_app_bar.dart';
 import 'package:etar_q/src/features/products/products_list/products_grid.dart';
 import 'package:etar_q/src/features/products/products_list/products_search_text_field.dart';
@@ -53,7 +54,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
           ),
           ResponsiveSliverCenter(
             padding: EdgeInsets.all(Sizes.p16),
-            child: ProductGrid(),
+            child: ProductsGrid(),
           ),
         ],
       ),
