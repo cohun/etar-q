@@ -34,7 +34,7 @@ class _ProductsSearchTextFieldState
             autofocus: false,
             style: Theme.of(context).textTheme.titleLarge,
             decoration: InputDecoration(
-              hintText: 'Search products',
+              hintText: 'Gyáriszám keresés',
               icon: const Icon(Icons.search),
               suffixIcon: value.text.isNotEmpty
                   ? IconButton(

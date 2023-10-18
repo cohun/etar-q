@@ -22,11 +22,11 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
     HomeScreen(),
     ProductsListScreen(),
     Text(
-      'Index 2: NFC',
+      'Index 2: Dokumentumok',
       style: optionStyle,
     ),
     Text(
-      'Index 3: QR kód',
+      'Index 3: Telephelyek',
       style: optionStyle,
     ),
   ];
@@ -64,12 +64,12 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
               label: 'Termékek',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.track_changes),
-              label: 'NFC',
+              icon: Icon(Icons.source),
+              label: 'Dokumentumok',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.barcode_reader),
-              label: 'QR +vonalkód',
+              icon: Icon(Icons.business),
+              label: 'Telephelyek',
             ),
           ],
           currentIndex: _selectedIndex,

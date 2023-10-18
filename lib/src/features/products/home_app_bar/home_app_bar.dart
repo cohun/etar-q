@@ -1,6 +1,5 @@
 import 'package:etar_q/src/common_widgets/action_text_button.dart';
 import 'package:etar_q/src/constants/breakpoints.dart';
-import 'package:etar_q/src/features/products/home_app_bar/more_menu_button.dart';
 import 'package:etar_q/src/features/products/home_app_bar/shopping_cart_icon.dart';
 import 'package:flutter/material.dart';
 
@@ -28,18 +27,29 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
     if (screenWidth < Breakpoint.tablet) {
       return AppBar(
         title: const Text('Termékek'),
-        actions: const [
-          ShoppingCartIcon(),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.nfc),
+            color: Colors.red,
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.barcode_reader),
+            color: Colors.orangeAccent,
+          ),
         ],
       );
     } else {
       return AppBar(
         title: const Text('Termékek'),
         actions: [
-          const ShoppingCartIcon(),
           ActionTextButton(
-            key: MoreMenuButton.ordersKey,
-            text: 'Orders',
+            text: 'NFC',
+            onPressed: () {},
+          ),
+          ActionTextButton(
+            text: 'QRCODE',
             onPressed: () {},
           ),
         ],
