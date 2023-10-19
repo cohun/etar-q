@@ -8,13 +8,10 @@ class SitesPersonPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.orange[50],
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.check),
-          onPressed: () => Navigator.pop(context),
-        ),
+        centerTitle: true,
         title: const Text(
           'Üzemeltetés helyszínei, üzemeltetők',
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 18),
         ),
         elevation: 2.0,
         backgroundColor: Colors.orange[800],
@@ -31,63 +28,23 @@ class SitesPersonPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        children: [
-                          Image.asset(
-                            'assets/images/factory1.jpg',
-                            height: 40,
-                          ),
-                          const Text(
-                            'Helyszínek: ',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Image.asset(
-                            'assets/images/truck1.jpg',
-                            height: 60,
-                          ),
-                          const Text(
-                            'Gépkocsik: ',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Image.asset(
-                            'assets/images/worker1.jpg',
-                            height: 50,
-                          ),
-                          const Text(
-                            'Dolgozók: ',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Image.asset(
-                        'assets/images/truck1.jpg',
-                        height: 60,
-                      ),
-                      const Text(
-                        'Gépkocsik: ',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
                       IconButton(
-                        icon: const Icon(Icons.add),
+                        iconSize: 40,
                         onPressed: () {},
+                        icon: Image.asset(
+                          'assets/images/truck1.jpg',
+                          height: 40,
+                        ),
+                      ),
+                      const Text(
+                        'POB902',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {},
+                        color: Colors.red,
                       ),
                     ],
                   ),
@@ -99,16 +56,24 @@ class SitesPersonPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Image.asset(
-                        'assets/images/worker1.jpg',
-                        height: 50,
+                      IconButton(
+                        onPressed: () {},
+                        iconSize: 40,
+                        icon: Image.asset(
+                          'assets/images/worker1.jpg',
+                          height: 50,
+                        ),
                       ),
                       const Text(
-                        'Dolgozók: ',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        'Kovács Béla',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.add),
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
                         onPressed: () {},
                       ),
                     ],
@@ -118,6 +83,12 @@ class SitesPersonPage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: Colors.orange.shade800,
+        tooltip: 'Új üzemeltető',
+        child: const Icon(Icons.add),
       ),
     );
   }
