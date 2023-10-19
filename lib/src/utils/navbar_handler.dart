@@ -1,6 +1,7 @@
 import 'package:etar_q/src/features/products/products_list/products_list_screen.dart';
 import 'package:etar_q/src/routing/app_router.dart';
 import 'package:etar_q/src/screens/home_screen.dart';
+import 'package:etar_q/src/screens/sites_persons_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,10 +26,7 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
       'Index 2: Dokumentumok',
       style: optionStyle,
     ),
-    Text(
-      'Index 3: Telephelyek',
-      style: optionStyle,
-    ),
+    SitesPersonPage(),
   ];
 
   @override
@@ -69,7 +67,7 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.business),
-              label: 'Telephelyek',
+              label: 'Üzemeltetők',
             ),
           ],
           currentIndex: _selectedIndex,
