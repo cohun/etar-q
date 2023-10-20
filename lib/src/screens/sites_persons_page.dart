@@ -1,7 +1,54 @@
 import 'package:flutter/material.dart';
 
-class SitesPersonPage extends StatelessWidget {
+const List<String> list = <String>[
+  'assets/images/worker1.jpg',
+  'assets/images/factory1.jpg',
+  'assets/images/truck1.jpg'
+];
+
+class SitesPersonPage extends StatefulWidget {
   const SitesPersonPage({super.key});
+
+  @override
+  State<SitesPersonPage> createState() => _SitesPersonPageState();
+}
+
+class _SitesPersonPageState extends State<SitesPersonPage> {
+  String dropdownValue = list.first;
+
+  void _showDialog(BuildContext context) {
+    int choiceBack = 0;
+    void getValue(value) => choiceBack = value;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: _popupMenu(),
+        );
+      },
+    );
+  }
+
+  Widget _popupMenu() {
+    return DropdownMenu<String>(
+      initialSelection: list.first,
+      onSelected: (String? value) {
+        // This is called when the user selects an item.
+        setState(() {
+          dropdownValue = value!;
+        });
+      },
+      dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
+        return DropdownMenuEntry<String>(
+            value: value,
+            leadingIcon: Image.asset(
+              value,
+              height: 40,
+            ),
+            label: '');
+      }).toList(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +75,7 @@ class SitesPersonPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(
-                        iconSize: 40,
-                        onPressed: () {},
-                        icon: Image.asset(
-                          'assets/images/truck1.jpg',
-                          height: 40,
-                        ),
-                      ),
+                      _popupMenu(),
                       const Text(
                         'POB902',
                         style: TextStyle(
@@ -57,10 +97,10 @@ class SitesPersonPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () => _showDialog(context),
                         iconSize: 40,
                         icon: Image.asset(
-                          'assets/images/worker1.jpg',
+                          dropdownValue,
                           height: 50,
                         ),
                       ),

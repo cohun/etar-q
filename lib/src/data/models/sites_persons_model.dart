@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 /// Model class for documents in the jobs collection
 class SitesPersonsModel extends Equatable {
   const SitesPersonsModel({
-    required this.what,
+    this.what = 0,
     required this.name,
   });
   final num what;
@@ -11,7 +11,7 @@ class SitesPersonsModel extends Equatable {
 
   factory SitesPersonsModel.fromMap(Map<String, dynamic> map) {
     return SitesPersonsModel(
-      what: map['what'] ?? 0,
+      what: map['what'],
       name: map['name'] ?? '',
     );
   }
