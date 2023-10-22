@@ -14,22 +14,25 @@ class SitesPersonPage extends StatefulWidget {
 }
 
 class _SitesPersonPageState extends State<SitesPersonPage> {
-  Widget _popupMenu(int what) {
-    String dropdownValue = list[what];
+  int what = 0;
+  Widget _popupMenu() {
     return PopupMenuButton(
         child: Image.asset(
-          dropdownValue,
+          list[what],
           width: 40,
         ),
         onSelected: (value) {
           setState(() {
-            dropdownValue = value!;
+            what = list.indexOf(value);
           });
         },
         itemBuilder: (BuildContext context) {
           return list.map((e) {
             return PopupMenuItem(
               value: e,
+              // onTap: () => setState(() {
+              //   dropdownValue = e;
+              // }),
               child: Image.asset(
                 e,
                 height: 30,
@@ -58,7 +61,7 @@ class _SitesPersonPageState extends State<SitesPersonPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              singleCard(1, "Kovács János"),
+              singleCard("Kovács János"),
             ],
           ),
         ),
@@ -72,14 +75,14 @@ class _SitesPersonPageState extends State<SitesPersonPage> {
     );
   }
 
-  Card singleCard(int what, String name) {
+  Card singleCard(String name) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _popupMenu(what),
+            _popupMenu(),
             Text(
               name,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
