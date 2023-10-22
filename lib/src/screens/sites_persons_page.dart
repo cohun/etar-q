@@ -14,40 +14,29 @@ class SitesPersonPage extends StatefulWidget {
 }
 
 class _SitesPersonPageState extends State<SitesPersonPage> {
-  String dropdownValue = list.first;
-
-  void _showDialog(BuildContext context) {
-    int choiceBack = 0;
-    void getValue(value) => choiceBack = value;
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: _popupMenu(),
-        );
-      },
-    );
-  }
-
-  Widget _popupMenu() {
-    return DropdownMenu<String>(
-      initialSelection: list.first,
-      onSelected: (String? value) {
-        // This is called when the user selects an item.
-        setState(() {
-          dropdownValue = value!;
+  Widget _popupMenu(int what) {
+    String dropdownValue = list[what];
+    return PopupMenuButton(
+        child: Image.asset(
+          dropdownValue,
+          width: 40,
+        ),
+        onSelected: (value) {
+          setState(() {
+            dropdownValue = value!;
+          });
+        },
+        itemBuilder: (BuildContext context) {
+          return list.map((e) {
+            return PopupMenuItem(
+              value: e,
+              child: Image.asset(
+                e,
+                height: 30,
+              ),
+            );
+          }).toList();
         });
-      },
-      dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
-        return DropdownMenuEntry<String>(
-            value: value,
-            leadingIcon: Image.asset(
-              value,
-              height: 40,
-            ),
-            label: '');
-      }).toList(),
-    );
   }
 
   @override
@@ -69,57 +58,7 @@ class _SitesPersonPageState extends State<SitesPersonPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _popupMenu(),
-                      const Text(
-                        'POB902',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {},
-                        color: Colors.red,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        onPressed: () => _showDialog(context),
-                        iconSize: 40,
-                        icon: Image.asset(
-                          dropdownValue,
-                          height: 50,
-                        ),
-                      ),
-                      const Text(
-                        'Kovács Béla',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                        ),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              singleCard(1, "Kovács János"),
             ],
           ),
         ),
@@ -129,6 +68,29 @@ class _SitesPersonPageState extends State<SitesPersonPage> {
         backgroundColor: Colors.orange.shade800,
         tooltip: 'Új üzemeltető',
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  Card singleCard(int what, String name) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _popupMenu(what),
+            Text(
+              name,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {},
+              color: Colors.red,
+            ),
+          ],
+        ),
       ),
     );
   }

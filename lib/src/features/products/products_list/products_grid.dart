@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:etar_q/src/constants/app_sizes.dart';
 import 'package:etar_q/src/constants/product_categories.dart';
-import 'package:etar_q/src/data/models/product_category.dart';
 import 'package:etar_q/src/features/products/products_list/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';

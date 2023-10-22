@@ -6,7 +6,7 @@ class SitesPersonsModel extends Equatable {
     this.what = 0,
     required this.name,
   });
-  final num what;
+  final int what;
   final String name;
 
   factory SitesPersonsModel.fromMap(Map<String, dynamic> map) {

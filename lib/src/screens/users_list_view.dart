@@ -141,7 +141,7 @@ class UsersListView extends ConsumerWidget {
                   );
                 }
                 Users data = snapshot.data as Users;
-                final oneCounter = ref
+                ref
                     .watch(firestoreRepositoryProvider)
                     .counterCompany(data.company)
                     .then((value) {

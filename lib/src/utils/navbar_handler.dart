@@ -4,7 +4,6 @@ import 'package:etar_q/src/screens/home_screen.dart';
 import 'package:etar_q/src/screens/sites_persons_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:etar_q/src/data/firestore_repository.dart';
 
 class BottomNavigation extends ConsumerStatefulWidget {
