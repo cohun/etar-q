@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:etar_q/src/data/firestore_repository.dart';
-import 'package:etar_q/src/data/users.dart';
+import 'package:etar_q/src/data/models/users.dart';
 import 'package:etar_q/src/routing/app_router.dart';
 import 'package:etar_q/src/utils/cards.dart';
 import 'package:etar_q/src/utils/dropdown.dart';

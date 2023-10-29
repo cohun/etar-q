@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:etar_q/src/data/counter.dart';
+import 'package:etar_q/src/data/models/counter.dart';
 import 'package:etar_q/src/data/firestore_repository.dart';
-import 'package:etar_q/src/data/users.dart';
+import 'package:etar_q/src/data/models/users.dart';
 import 'package:etar_q/src/routing/app_router.dart';
 import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';

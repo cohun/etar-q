@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:etar_q/src/data/counter.dart';
-import 'package:etar_q/src/data/users.dart';
+import 'package:etar_q/src/data/models/counter.dart';
+import 'package:etar_q/src/data/models/users.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FirestoreRepository {
