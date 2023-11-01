@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:etar_q/src/data/models/counter.dart';
+import 'package:etar_q/src/data/models/product_model.dart';
+import 'package:etar_q/src/data/models/sites_persons_model.dart';
 import 'package:etar_q/src/data/models/users.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -182,6 +184,22 @@ class FirestoreRepository {
     return _firestore.collection('counter').orderBy('company').withConverter(
         fromFirestore: (snapshot, _) => Counter.fromMap(snapshot.data()!),
         toFirestore: (counter, _) => counter.toMap());
+  }
+
+  Future<void> createSite(SitesPersonsModel site, String company) {
+    return _firestore
+        .collection('companies/$company/sites')
+        .add({site.toMap()} as Map<String, dynamic>);
+  }
+
+  Future<void> createProduct(ProductModel product) {
+    return _firestore
+        .doc('companies/${product.company}/products/${product.identifier}')
+        .set(
+          {product.toMap()} as Map<String, dynamic>,
+          // true to keep old fields ( if any )
+          SetOptions(merge: true),
+        );
   }
 }
 

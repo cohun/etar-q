@@ -1,4 +1,8 @@
+import 'package:etar_q/src/data/firestore_repository.dart';
+import 'package:etar_q/src/routing/app_router.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 const List<String> list = <String>[
   'assets/images/worker1.jpg',
@@ -6,16 +10,18 @@ const List<String> list = <String>[
   'assets/images/truck1.jpg'
 ];
 
-class SitesPersonPage extends StatefulWidget {
+class SitesPersonPage extends ConsumerStatefulWidget {
   const SitesPersonPage({super.key});
 
   @override
-  State<SitesPersonPage> createState() => _SitesPersonPageState();
+  ConsumerState<SitesPersonPage> createState() => _SitesPersonPageState();
 }
 
-class _SitesPersonPageState extends State<SitesPersonPage> {
+class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
   int what = 0;
-  Widget _popupMenu() {
+  bool isApproved = false;
+
+  Widget _popupMenu(void Function() tapped) {
     return PopupMenuButton(
         child: Image.asset(
           list[what],
@@ -23,7 +29,8 @@ class _SitesPersonPageState extends State<SitesPersonPage> {
         ),
         onSelected: (value) {
           setState(() {
-            what = list.indexOf(value);
+            tapped();
+            isApproved ? what = list.indexOf(value) : what;
           });
         },
         itemBuilder: (BuildContext context) {
@@ -44,6 +51,26 @@ class _SitesPersonPageState extends State<SitesPersonPage> {
 
   @override
   Widget build(BuildContext context) {
+    final firestoreRepository = ref.watch(firestoreRepositoryProvider);
+    final user = ref.read(firebaseAuthProvider).currentUser;
+    void tapped() {
+      firestoreRepository.oneUserQuery(user!.uid).then(
+            (value) => value.approvedRole == 'superSuper' ||
+                    value.approvedRole == 'jogosultság osztó' ||
+                    value.approvedRole == 'hyperSuper' ||
+                    value.approvedRole == 'adminisztrátor' ||
+                    value.approvedRole == 'admin'
+                ? setState(() {
+                    isApproved = true;
+                  })
+                : ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text(
+                            'Ehhez adminisztrátori jogosultság szükséges!')),
+                  ),
+          );
+    }
+
     return Scaffold(
       backgroundColor: Colors.orange[50],
       appBar: AppBar(
@@ -61,13 +88,13 @@ class _SitesPersonPageState extends State<SitesPersonPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              singleCard("Kovács János"),
+              singleCard("Kovács János", tapped),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: tapped,
         backgroundColor: Colors.orange.shade800,
         tooltip: 'Új üzemeltető',
         child: const Icon(Icons.add),
@@ -75,21 +102,21 @@ class _SitesPersonPageState extends State<SitesPersonPage> {
     );
   }
 
-  Card singleCard(String name) {
+  Card singleCard(String name, void Function() tapped) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _popupMenu(),
+            _popupMenu(tapped),
             Text(
               name,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             IconButton(
               icon: const Icon(Icons.delete),
-              onPressed: () {},
+              onPressed: tapped,
               color: Colors.red,
             ),
           ],
