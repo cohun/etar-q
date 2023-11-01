@@ -1,4 +1,5 @@
 import 'package:etar_q/src/data/firestore_repository.dart';
+import 'package:etar_q/src/features/sites/add_sites_page.dart';
 import 'package:etar_q/src/routing/app_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +95,12 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: tapped,
+        onPressed: () {
+          tapped();
+          if (isApproved) {
+            AddSitesPage.show(context);
+          }
+        },
         backgroundColor: Colors.orange.shade800,
         tooltip: 'Új üzemeltető',
         child: const Icon(Icons.add),
