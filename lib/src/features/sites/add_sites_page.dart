@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 
 class AddSitesPage extends StatefulWidget {
@@ -56,6 +54,7 @@ class _AddSitesPageState extends State<AddSitesPage> {
     'assets/images/factory1.jpg',
     'assets/images/truck1.jpg'
   ];
+  List<String> listText = ['dolgozó', 'munkahely', 'gépjármű'];
   List<String> listOfValue = ['1', '2', '3'];
 
   List<Widget> _buildFormChildren() {
@@ -79,9 +78,18 @@ class _AddSitesPageState extends State<AddSitesPage> {
         items: listOfValue.map((String val) {
           return DropdownMenuItem(
             value: val,
-            child: Image.asset(
-              list[listOfValue.indexOf(val)],
-              height: 40,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Image.asset(
+                  list[listOfValue.indexOf(val)],
+                  height: 40,
+                ),
+                SizedBox(
+                  width: 30,
+                ),
+                Text(listText[listOfValue.indexOf(val)]),
+              ],
             ),
           );
         }).toList(),

@@ -1,7 +1,6 @@
 import 'package:etar_q/src/data/firestore_repository.dart';
 import 'package:etar_q/src/features/sites/add_sites_page.dart';
 import 'package:etar_q/src/routing/app_router.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
