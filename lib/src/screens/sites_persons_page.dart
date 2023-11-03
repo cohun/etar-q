@@ -20,6 +20,7 @@ class SitesPersonPage extends ConsumerStatefulWidget {
 class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
   int what = 0;
   bool isApproved = false;
+  String company = '';
 
   Widget _popupMenu(void Function() tapped) {
     return PopupMenuButton(
@@ -53,6 +54,7 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
   Widget build(BuildContext context) {
     final firestoreRepository = ref.watch(firestoreRepositoryProvider);
     final user = ref.read(firebaseAuthProvider).currentUser;
+
     void tapped() {
       firestoreRepository.oneUserQuery(user!.uid).then(
             (value) => value.approvedRole == 'superSuper' ||
@@ -62,6 +64,7 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
                     value.approvedRole == 'admin'
                 ? setState(() {
                     isApproved = true;
+                    company = value.company;
                   })
                 : ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -97,7 +100,7 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
         onPressed: () {
           tapped();
           if (isApproved) {
-            AddSitesPage.show(context);
+            AddSitesPage.show(context, company);
           }
         },
         backgroundColor: Colors.orange.shade800,

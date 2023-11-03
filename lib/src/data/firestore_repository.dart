@@ -187,9 +187,16 @@ class FirestoreRepository {
   }
 
   Future<void> createSite(SitesPersonsModel site, String company) {
-    return _firestore
-        .collection('companies/$company/sites')
-        .add({site.toMap()} as Map<String, dynamic>);
+    final ref = _firestore
+        .doc('companies/$company/sites/${site.name}')
+        .withConverter(
+            fromFirestore: (snapshot, _) =>
+                SitesPersonsModel.fromMap(snapshot.data()!),
+            toFirestore: (site, options) => site.toMap());
+    return ref.set(
+      site,
+      SetOptions(merge: true),
+    );
   }
 
   Future<void> createProduct(ProductModel product) {

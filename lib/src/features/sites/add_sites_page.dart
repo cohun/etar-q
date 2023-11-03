@@ -1,25 +1,65 @@
+import 'package:etar_q/src/data/firestore_repository.dart';
+import 'package:etar_q/src/data/models/sites_persons_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddSitesPage extends StatefulWidget {
-  const AddSitesPage({super.key});
-  static Future<void> show(BuildContext context) async {
+class AddSitesPage extends ConsumerStatefulWidget {
+  const AddSitesPage({super.key, required this.company});
+  final String company;
+  static Future<void> show(BuildContext context, String company) async {
     await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const AddSitesPage(), fullscreenDialog: true));
+        builder: (context) => AddSitesPage(
+              company: company,
+            ),
+        fullscreenDialog: true));
   }
 
   @override
-  State<AddSitesPage> createState() => _AddSitesPageState();
+  ConsumerState<AddSitesPage> createState() => _AddSitesPageState();
 }
 
-class _AddSitesPageState extends State<AddSitesPage> {
+class _AddSitesPageState extends ConsumerState<AddSitesPage> {
+  final _formKey = GlobalKey<FormState>();
+  String _selectedValue = '1';
+  String _name = '';
+
+  bool _validateAndSaveForm() {
+    final form = _formKey.currentState;
+    if (form!.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
+  }
+
+  void _submit(FirestoreRepository firestoreRepository) {
+    final s = _name;
+    final what = int.tryParse(_selectedValue)!;
+    if (_validateAndSaveForm()) {
+      final site = SitesPersonsModel(name: s, what: what);
+      print("Name: ${site.what}");
+      print(widget.company);
+      firestoreRepository.createSite(site, widget.company);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final firestoreRepository = ref.watch(firestoreRepositoryProvider);
     return Scaffold(
       backgroundColor: Colors.orange[50],
       appBar: AppBar(
         elevation: 2.0,
         backgroundColor: Colors.orange[800],
         title: const Text('Új üzemeltetési hely'),
+        actions: [
+          TextButton(
+              onPressed: () => _submit(firestoreRepository),
+              child: const Text(
+                'Mentés',
+                style: TextStyle(fontSize: 18, color: Colors.white),
+              ))
+        ],
       ),
       body: _buildContents(),
     );
@@ -42,13 +82,13 @@ class _AddSitesPageState extends State<AddSitesPage> {
 
   Widget _buildForm() {
     return Form(
+        key: _formKey,
         child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: _buildFormChildren(),
-    ));
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: _buildFormChildren(),
+        ));
   }
 
-  String _selectedValue = '1';
   List<String> list = <String>[
     'assets/images/worker1.jpg',
     'assets/images/factory1.jpg',
@@ -85,7 +125,7 @@ class _AddSitesPageState extends State<AddSitesPage> {
                   list[listOfValue.indexOf(val)],
                   height: 40,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 30,
                 ),
                 Text(listText[listOfValue.indexOf(val)]),
@@ -96,6 +136,8 @@ class _AddSitesPageState extends State<AddSitesPage> {
       ),
       TextFormField(
         decoration: const InputDecoration(labelText: 'Megnevezés'),
+        onSaved: (value) => _name = value!,
+        validator: (value) => value!.isNotEmpty ? null : 'Kérem kitölteni!',
       ),
     ];
   }

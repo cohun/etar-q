@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 /// Model class for documents in the jobs collection
 class SitesPersonsModel extends Equatable {
   const SitesPersonsModel({
-    this.what = 0,
+    this.what = 1,
     required this.name,
   });
   final int what;
