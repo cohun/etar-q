@@ -37,9 +37,11 @@ class _AddSitesPageState extends ConsumerState<AddSitesPage> {
     final what = int.tryParse(_selectedValue)!;
     if (_validateAndSaveForm()) {
       final site = SitesPersonsModel(name: s, what: what);
-      print("Name: ${site.what}");
+      print("What: ${site.what}");
+      print("Name: ${site.name}");
       print(widget.company);
       firestoreRepository.createSite(site, widget.company);
+      Navigator.pop(context);
     }
   }
 
@@ -137,6 +139,11 @@ class _AddSitesPageState extends ConsumerState<AddSitesPage> {
       TextFormField(
         decoration: const InputDecoration(labelText: 'Megnevezés'),
         onSaved: (value) => _name = value!,
+        onChanged: (value) {
+          setState(() {
+            _name = value;
+          });
+        },
         validator: (value) => value!.isNotEmpty ? null : 'Kérem kitölteni!',
       ),
     ];

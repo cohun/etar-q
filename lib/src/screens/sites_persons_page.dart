@@ -1,8 +1,10 @@
 import 'package:etar_q/src/data/firestore_repository.dart';
 import 'package:etar_q/src/features/sites/add_sites_page.dart';
 import 'package:etar_q/src/routing/app_router.dart';
+import 'package:etar_q/src/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 const List<String> list = <String>[
   'assets/images/worker1.jpg',
@@ -19,10 +21,11 @@ class SitesPersonPage extends ConsumerStatefulWidget {
 
 class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
   int what = 0;
+  String name = 'Kovács János';
   bool isApproved = false;
   String company = '';
 
-  Widget _popupMenu(void Function() tapped) {
+  Widget _popupMenu() {
     return PopupMenuButton(
         child: Image.asset(
           list[what],
@@ -30,8 +33,7 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
         ),
         onSelected: (value) {
           setState(() {
-            tapped();
-            isApproved ? what = list.indexOf(value) : what;
+            isApproved ? what = list.indexOf(value) : _notApprovedMessage();
           });
         },
         itemBuilder: (BuildContext context) {
@@ -39,7 +41,8 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
             return PopupMenuItem(
               value: e,
               // onTap: () => setState(() {
-              //   dropdownValue = e;
+              //   tapped();
+              //   isApproved ? what = list.indexOf(e) : what;
               // }),
               child: Image.asset(
                 e,
@@ -55,24 +58,8 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
     final firestoreRepository = ref.watch(firestoreRepositoryProvider);
     final user = ref.read(firebaseAuthProvider).currentUser;
 
-    void tapped() {
-      firestoreRepository.oneUserQuery(user!.uid).then(
-            (value) => value.approvedRole == 'superSuper' ||
-                    value.approvedRole == 'jogosultság osztó' ||
-                    value.approvedRole == 'hyperSuper' ||
-                    value.approvedRole == 'adminisztrátor' ||
-                    value.approvedRole == 'admin'
-                ? setState(() {
-                    isApproved = true;
-                    company = value.company;
-                  })
-                : ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text(
-                            'Ehhez adminisztrátori jogosultság szükséges!')),
-                  ),
-          );
-    }
+    final oneUser = firestoreRepository.oneUserStream(user!.uid);
+    goBack() => context.goNamed(AppRoute.home.name);
 
     return Scaffold(
       backgroundColor: Colors.orange[50],
@@ -91,17 +78,41 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              singleCard("Kovács János", tapped),
+              StreamBuilder(
+                stream: oneUser,
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return const Text(
+                      "Something went wrong",
+                    );
+                  }
+                  if (snapshot.connectionState != ConnectionState.waiting &&
+                      snapshot.hasData) {
+                    final apRol = snapshot.data?.approvedRole;
+                    if (apRol == 'superSuper' ||
+                        apRol == 'jogosultság osztó' ||
+                        apRol == 'hyperSuper' ||
+                        apRol == 'adminisztrátor' ||
+                        apRol == 'admin') {
+                      isApproved = true;
+                      company = snapshot.data!.company;
+                      return singleCard();
+                    } else {
+                      return singleCard();
+                    }
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                },
+              ),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          tapped();
-          if (isApproved) {
-            AddSitesPage.show(context, company);
-          }
+          isApproved
+              ? AddSitesPage.show(context, company)
+              : _notApprovedMessage();
         },
         backgroundColor: Colors.orange.shade800,
         tooltip: 'Új üzemeltető',
@@ -110,21 +121,21 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
     );
   }
 
-  Card singleCard(String name, void Function() tapped) {
+  Card singleCard() {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _popupMenu(tapped),
+            _popupMenu(),
             Text(
               name,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             IconButton(
               icon: const Icon(Icons.delete),
-              onPressed: tapped,
+              onPressed: isApproved ? _deleteCard : _notApprovedMessage,
               color: Colors.red,
             ),
           ],
@@ -132,4 +143,11 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
       ),
     );
   }
+
+  _notApprovedMessage() => ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Ehhez adminisztrátori jogosultság szükséges!')),
+      );
+
+  _deleteCard() {}
 }
