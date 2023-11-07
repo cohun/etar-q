@@ -208,6 +208,13 @@ class FirestoreRepository {
           SetOptions(merge: true),
         );
   }
+
+  Query<SitesPersonsModel> sitesQuery(String company) {
+    return _firestore.collection('companies/$company/sites').withConverter(
+        fromFirestore: (snapshot, _) =>
+            SitesPersonsModel.fromMap(snapshot.data()!),
+        toFirestore: (site, _) => site.toMap());
+  }
 }
 
 final firestoreRepositoryProvider = Provider<FirestoreRepository>((ref) {

@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AddSitesPage extends ConsumerStatefulWidget {
-  const AddSitesPage({super.key, required this.company});
-  final String company;
-  static Future<void> show(BuildContext context, String company) async {
+  const AddSitesPage({super.key, required this.uid});
+  final String uid;
+  static Future<void> show(BuildContext context, String uid) async {
     await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => AddSitesPage(
-              company: company,
+              uid: uid,
             ),
         fullscreenDialog: true));
   }
@@ -39,9 +39,11 @@ class _AddSitesPageState extends ConsumerState<AddSitesPage> {
       final site = SitesPersonsModel(name: s, what: what);
       print("What: ${site.what}");
       print("Name: ${site.name}");
-      print(widget.company);
-      firestoreRepository.createSite(site, widget.company);
-      Navigator.pop(context);
+      print(widget.uid);
+      firestoreRepository.oneUserQuery(widget.uid).then((value) {
+        firestoreRepository.createSite(site, value.company);
+        Navigator.pop(context);
+      });
     }
   }
 

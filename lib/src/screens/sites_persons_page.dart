@@ -1,10 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:etar_q/src/data/firestore_repository.dart';
+import 'package:etar_q/src/data/models/sites_persons_model.dart';
 import 'package:etar_q/src/features/sites/add_sites_page.dart';
 import 'package:etar_q/src/routing/app_router.dart';
-import 'package:etar_q/src/screens/home_screen.dart';
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 const List<String> list = <String>[
   'assets/images/worker1.jpg',
@@ -25,10 +26,10 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
   bool isApproved = false;
   String company = '';
 
-  Widget _popupMenu() {
+  Widget _popupMenu(String name, int what) {
     return PopupMenuButton(
         child: Image.asset(
-          list[what],
+          list[what - 1],
           width: 40,
         ),
         onSelected: (value) {
@@ -59,7 +60,6 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
     final user = ref.read(firebaseAuthProvider).currentUser;
 
     final oneUser = firestoreRepository.oneUserStream(user!.uid);
-    goBack() => context.goNamed(AppRoute.home.name);
 
     return Scaffold(
       backgroundColor: Colors.orange[50],
@@ -89,17 +89,28 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
                   if (snapshot.connectionState != ConnectionState.waiting &&
                       snapshot.hasData) {
                     final apRol = snapshot.data?.approvedRole;
+                    final company = snapshot.data!.company;
                     if (apRol == 'superSuper' ||
                         apRol == 'jogosultság osztó' ||
                         apRol == 'hyperSuper' ||
                         apRol == 'adminisztrátor' ||
                         apRol == 'admin') {
                       isApproved = true;
-                      company = snapshot.data!.company;
-                      return singleCard();
-                    } else {
-                      return singleCard();
                     }
+                    return Column(
+                      children: [
+                        SizedBox(
+                          height: 1200,
+                          child: FirestoreListView(
+                            query: firestoreRepository.sitesQuery(company),
+                            itemBuilder: (BuildContext context,
+                                QueryDocumentSnapshot<SitesPersonsModel> doc) {
+                              return singleCard(doc['name'], doc['what']);
+                            },
+                          ),
+                        ),
+                      ],
+                    );
                   }
                   return const Center(child: CircularProgressIndicator());
                 },
@@ -111,7 +122,7 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           isApproved
-              ? AddSitesPage.show(context, company)
+              ? AddSitesPage.show(context, user.uid)
               : _notApprovedMessage();
         },
         backgroundColor: Colors.orange.shade800,
@@ -121,14 +132,14 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
     );
   }
 
-  Card singleCard() {
+  Card singleCard(String name, int what) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _popupMenu(),
+            _popupMenu(name, what),
             Text(
               name,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -150,4 +161,20 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
       );
 
   _deleteCard() {}
+}
+
+class SitesListView extends ConsumerWidget {
+  const SitesListView(this.company, {super.key});
+  final String company;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final firestoreRepository = ref.watch(firestoreRepositoryProvider);
+    return FirestoreListView(
+      query: firestoreRepository.sitesQuery(company),
+      itemBuilder:
+          (BuildContext context, QueryDocumentSnapshot<SitesPersonsModel> doc) {
+        return const SizedBox.shrink();
+      },
+    );
+  }
 }
