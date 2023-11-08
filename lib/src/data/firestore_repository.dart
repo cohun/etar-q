@@ -215,6 +215,17 @@ class FirestoreRepository {
             SitesPersonsModel.fromMap(snapshot.data()!),
         toFirestore: (site, _) => site.toMap());
   }
+
+  Future<void> deleteSite({
+    required String name,
+    required String company,
+  }) async {
+    final docRef = _firestore.collection('companies/$company/sites').doc(name);
+    await docRef.delete().then(
+          (doc) => print("Document deleted $company + $name"),
+          onError: (e) => print("Error updating document $e"),
+        );
+  }
 }
 
 final firestoreRepositoryProvider = Provider<FirestoreRepository>((ref) {

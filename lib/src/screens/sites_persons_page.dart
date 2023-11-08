@@ -105,7 +105,8 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
                             query: firestoreRepository.sitesQuery(company),
                             itemBuilder: (BuildContext context,
                                 QueryDocumentSnapshot<SitesPersonsModel> doc) {
-                              return singleCard(doc['name'], doc['what']);
+                              return singleCard(
+                                  doc['name'], doc['what'], company);
                             },
                           ),
                         ),
@@ -132,7 +133,7 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
     );
   }
 
-  Card singleCard(String name, int what) {
+  Card singleCard(String name, int what, String company) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -146,7 +147,9 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
             ),
             IconButton(
               icon: const Icon(Icons.delete),
-              onPressed: isApproved ? _deleteCard : _notApprovedMessage,
+              onPressed: isApproved
+                  ? () => _deleteCard(name, company)
+                  : _notApprovedMessage,
               color: Colors.red,
             ),
           ],
@@ -160,7 +163,11 @@ class _SitesPersonPageState extends ConsumerState<SitesPersonPage> {
             content: Text('Ehhez adminisztrátori jogosultság szükséges!')),
       );
 
-  _deleteCard() {}
+  _deleteCard(String name, String company) {
+    ref
+        .read(firestoreRepositoryProvider)
+        .deleteSite(name: name, company: company);
+  }
 }
 
 class SitesListView extends ConsumerWidget {

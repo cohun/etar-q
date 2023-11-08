@@ -3,10 +3,6 @@ import 'package:etar_q/src/data/firestore_repository.dart';
 import 'package:etar_q/src/data/models/users.dart';
 import 'package:etar_q/src/routing/app_router.dart';
 import 'package:etar_q/src/screens/users_list_view.dart';
-import 'package:etar_q/src/utils/cards.dart';
-import 'package:etar_q/src/utils/dropdown.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
