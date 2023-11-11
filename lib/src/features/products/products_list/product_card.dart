@@ -1,10 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:etar_q/src/features/products/products_list/product_category_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:etar_q/src/common_widgets/custom_image.dart';
 import 'package:etar_q/src/constants/app_sizes.dart';
 import 'package:etar_q/src/data/models/product_category.dart';
+import 'package:go_router/go_router.dart';
 
 /// Used to show a single product inside a card.
 class ProductCard extends ConsumerWidget {
@@ -24,7 +26,10 @@ class ProductCard extends ConsumerWidget {
     return Card(
       child: InkWell(
         key: productCardKey,
-        onTap: onPressed,
+        onTap: () {
+          print("pressed");
+          context.goNamed('product');
+        },
         child: Padding(
           padding: const EdgeInsets.all(Sizes.p32),
           child: Column(

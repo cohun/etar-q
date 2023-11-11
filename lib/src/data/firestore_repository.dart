@@ -200,13 +200,30 @@ class FirestoreRepository {
   }
 
   Future<void> createProduct(ProductModel product) {
-    return _firestore
+    final ref = _firestore
         .doc('companies/${product.company}/products/${product.identifier}')
-        .set(
-          {product.toMap()} as Map<String, dynamic>,
-          // true to keep old fields ( if any )
-          SetOptions(merge: true),
+        .withConverter(
+            fromFirestore: (snapshot, _) =>
+                ProductModel.fromMap(snapshot.data()!),
+            toFirestore: (product, options) => product.toMap());
+    return ref.set(
+      product,
+      // true to keep old fields ( if any )
+      SetOptions(merge: true),
+    );
+  }
+
+  Stream<List<ProductModel>> watchProductsList(
+      String productGroup, String company) {
+    final ref = _firestore
+        .collection('companies/$company/products')
+        .where("productGroup", isEqualTo: productGroup)
+        .withConverter(
+          fromFirestore: (doc, _) => ProductModel.fromMap(doc.data()!),
+          toFirestore: (product, _) => product.toMap(),
         );
+    return ref.snapshots().map((snapshot) =>
+        snapshot.docs.map((docSnapshot) => docSnapshot.data()).toList());
   }
 
   Query<SitesPersonsModel> sitesQuery(String company) {

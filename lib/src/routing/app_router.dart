@@ -1,3 +1,4 @@
+import 'package:etar_q/src/features/products/products_list/product_category_list_page.dart';
 import 'package:etar_q/src/routing/go_router_refresh_stream.dart';
 import 'package:etar_q/src/screens/add_company.dart';
 import 'package:etar_q/src/screens/custom_profile_screen.dart';
@@ -70,6 +71,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
             path: 'companies',
             name: AppRoute.companies.name,
             builder: (context, state) => const CompanyList(),
+          ),
+          GoRoute(
+            path: 'product',
+            name: AppRoute.product.name,
+            builder: (context, state) => const ProductCategoryListPage(),
           ),
         ],
       ),
