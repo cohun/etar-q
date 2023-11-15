@@ -27,7 +27,6 @@ class ProductCard extends ConsumerWidget {
       child: InkWell(
         key: productCardKey,
         onTap: () {
-          print("pressed");
           context.goNamed('product');
         },
         child: Padding(
