@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:etar_q/src/common_widgets/responsive_center.dart';
 import 'package:etar_q/src/constants/app_sizes.dart';
 import 'package:etar_q/src/constants/product_categories.dart';
 import 'package:etar_q/src/features/products/home_app_bar/home_app_bar.dart';
 import 'package:etar_q/src/features/products/products_list/products_grid.dart';
 import 'package:etar_q/src/features/products/products_list/products_search_text_field.dart';
+import 'package:excel/excel.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 /// Shows the list of products with a search field at the top.
@@ -21,6 +25,7 @@ class _ProductCategoryListPageState extends State<ProductCategoryListPage> {
   // * This is needed because this page has a search field that the user can
   // * type into.
   final _scrollController = ScrollController();
+  var selectedExcel = Excel.createExcel();
 
   @override
   void initState() {
@@ -42,20 +47,61 @@ class _ProductCategoryListPageState extends State<ProductCategoryListPage> {
     }
   }
 
+  pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      File file = File(result.files.single.path!);
+
+      var bytes = file.readAsBytesSync();
+      var excel = Excel.decodeBytes(bytes);
+      selectedExcel = excel;
+      print(selectedExcel["Sheet1"].sheetName);
+      Sheet sheet = selectedExcel["Sheet1"];
+      var sheetName = sheet.sheetName;
+
+      getList(sheetName);
+    } else {
+      // User canceled the picker
+    }
+    print("The final List of List Length is ${selectedExcel.tables.length}");
+  }
+
+  getList(sheetName) async {
+    selectedExcel.tables.clear();
+    //
+    print(selectedExcel["Sheet1"].rows.length);
+    for (var row in selectedExcel.tables[sheetName]!.rows) {
+      print(row);
+      //tbleRows.add(row);
+    }
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const HomeAppBar(),
       body: CustomScrollView(
         controller: _scrollController,
-        slivers: const [
-          ResponsiveSliverCenter(
+        slivers: [
+          const ResponsiveSliverCenter(
             padding: EdgeInsets.all(Sizes.p16),
             child: ProductsSearchTextField(),
           ),
           ResponsiveSliverCenter(
-            padding: EdgeInsets.all(Sizes.p16),
-            child: Placeholder(),
+            padding: const EdgeInsets.all(Sizes.p16),
+            child: Column(
+              children: [
+                TextButton(
+                    onPressed: pickFile,
+                    child: const Text(
+                      "Pick from storage",
+                      style: TextStyle(color: Colors.black),
+                    ))
+              ],
+            ),
           ),
         ],
       ),
