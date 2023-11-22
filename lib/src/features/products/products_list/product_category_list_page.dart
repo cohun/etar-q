@@ -72,7 +72,11 @@ class _ProductCategoryListPageState extends State<ProductCategoryListPage> {
     //
     print(selectedExcel["Sheet1"].rows.length);
     for (var row in selectedExcel.tables[sheetName]!.rows) {
-      print(row);
+      if (row[0]!.props.isNotEmpty) {
+        print(row[0]?.props.first);
+        print(row[1]?.props.first);
+      }
+
       //tbleRows.add(row);
     }
 
