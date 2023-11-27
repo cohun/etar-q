@@ -56,8 +56,8 @@ class _ProductCategoryListPageState extends State<ProductCategoryListPage> {
       var bytes = file.readAsBytesSync();
       var excel = Excel.decodeBytes(bytes);
       selectedExcel = excel;
-      print(selectedExcel["Sheet1"].sheetName);
-      Sheet sheet = selectedExcel["Sheet1"];
+      print(selectedExcel["Bevitel"].sheetName);
+      Sheet sheet = selectedExcel["Bevitel"];
       var sheetName = sheet.sheetName;
 
       getList(sheetName);
@@ -70,7 +70,7 @@ class _ProductCategoryListPageState extends State<ProductCategoryListPage> {
   getList(sheetName) async {
     selectedExcel.tables.clear();
     //
-    print(selectedExcel["Sheet1"].rows.length);
+    print(selectedExcel["Bevitel"].rows.length);
     for (var row in selectedExcel.tables[sheetName]!.rows) {
       if (row[0]!.props.isNotEmpty) {
         print(row[0]?.props.first);
