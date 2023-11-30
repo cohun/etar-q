@@ -48,7 +48,23 @@ class _ProductCategoryListPageState extends State<ProductCategoryListPage> {
   }
 
   pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['xlsx'],
+      allowMultiple: false,
+    );
+    // if (result != null) {
+    //   var bytes = result.files.single.bytes;
+    //   var excel = Excel.decodeBytes(bytes!);
+    //   for (var table in excel.tables.keys) {
+    //     print(table); //sheet Name
+    //     print(excel.tables[table]!.maxColumns);
+    //     print(excel.tables[table]!.maxRows);
+    //     for (var row in excel.tables[table]!.rows) {
+    //       print('$row');
+    //     }
+    //   }
+    // }
 
     if (result != null) {
       File file = File(result.files.single.path!);
