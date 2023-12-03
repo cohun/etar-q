@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:etar_q/src/common_widgets/responsive_center.dart';
 import 'package:etar_q/src/constants/app_sizes.dart';
 import 'package:etar_q/src/constants/product_categories.dart';
+import 'package:etar_q/src/data/models/product_model.dart';
 import 'package:etar_q/src/features/products/home_app_bar/home_app_bar.dart';
 import 'package:etar_q/src/features/products/products_list/products_grid.dart';
 import 'package:etar_q/src/features/products/products_list/products_search_text_field.dart';
@@ -12,7 +13,8 @@ import 'package:flutter/material.dart';
 
 /// Shows the list of products with a search field at the top.
 class ProductCategoryListPage extends StatefulWidget {
-  const ProductCategoryListPage({super.key});
+  const ProductCategoryListPage({super.key, required this.company});
+  final String company;
 
   @override
   State<ProductCategoryListPage> createState() =>
@@ -99,6 +101,8 @@ class _ProductCategoryListPageState extends State<ProductCategoryListPage> {
     setState(() {});
   }
 
+  List<ProductModel> products = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,9 +120,9 @@ class _ProductCategoryListPageState extends State<ProductCategoryListPage> {
               children: [
                 TextButton(
                     onPressed: pickFile,
-                    child: const Text(
-                      "Pick from storage",
-                      style: TextStyle(color: Colors.black),
+                    child: Text(
+                      "Pick from storage ${widget.company}",
+                      style: const TextStyle(color: Colors.black),
                     ))
               ],
             ),
