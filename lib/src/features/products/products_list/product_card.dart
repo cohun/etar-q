@@ -48,6 +48,8 @@ class ProductCard extends ConsumerWidget {
             var company = (data.company);
 
             return Card(
+              color: Colors.white,
+              elevation: 8,
               child: InkWell(
                 key: productCardKey,
                 onTap: () {

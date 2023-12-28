@@ -20,7 +20,9 @@ class HomeScreen extends ConsumerWidget {
           onPressed: () => context.goNamed(AppRoute.profile.name),
         )
       ]),
-      body: const SingleChildScrollView(child: UsersListView()),
+      body: const SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: UsersListView()),
     );
   }
 }
