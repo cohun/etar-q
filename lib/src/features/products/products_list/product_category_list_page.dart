@@ -119,11 +119,30 @@ class _ProductCategoryListPageState extends State<ProductCategoryListPage> {
             child: Column(
               children: [
                 TextButton(
-                    onPressed: pickFile,
-                    child: Text(
-                      "Pick from storage ${widget.company}",
-                      style: const TextStyle(color: Colors.black),
-                    ))
+                  onPressed: pickFile,
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all<EdgeInsets>(
+                        const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 12.0)),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          20.0,
+                        ),
+                      ),
+                    ),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      Colors.green,
+                    ),
+                    textStyle: MaterialStateProperty.all<TextStyle>(
+                        const TextStyle(
+                            fontSize: 16.0, fontWeight: FontWeight.bold)),
+                  ),
+                  child: const Text(
+                    "Termékfeltöltés excel fájlból",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ],
             ),
           ),
