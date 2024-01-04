@@ -79,138 +79,145 @@ class UsersListView extends ConsumerWidget {
     final oneUser =
         ref.watch(firestoreRepositoryProvider).oneUserStream(user!.uid);
 
-    return Column(
-      children: [
-        StreamBuilder(
-          initialData: Users(
-              uid: user.uid, name: '', company: '', role: '', approvedRole: ''),
-          stream: oneUser,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Text(
-                "Something went wrong",
-              );
-            }
-            if (snapshot.connectionState != ConnectionState.waiting) {
-              if (snapshot.data?.company == '' || !snapshot.hasData) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          StreamBuilder(
+            initialData: Users(
+                uid: user.uid,
+                name: '',
+                company: '',
+                role: '',
+                approvedRole: ''),
+            stream: oneUser,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Text(
+                  "Something went wrong",
+                );
+              }
+              if (snapshot.connectionState != ConnectionState.waiting) {
+                if (snapshot.data?.company == '' || !snapshot.hasData) {
+                  return SizedBox(
+                    height: 300,
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text.rich(
+                          const TextSpan(
+                              text:
+                                  "A saját fiók beállításokban (jobboldalt fent ikon) tudod a felhasználói nevedet megadni"),
+                          style: TextStyle(color: Colors.amber.shade800),
+                          textAlign: TextAlign.center,
+                        ),
+                        const Text('Csak ezután válassz céget!'),
+                        FloatingActionButton(
+                          heroTag: 'btn2',
+                          child: const Icon(Icons.add),
+                          onPressed: () {
+                            ref
+                                .read(firebaseAuthProvider)
+                                .idTokenChanges()
+                                .listen(
+                              (User? user) {
+                                if (user?.displayName == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        duration: Duration(seconds: 6),
+                                        content: Text(
+                                            'Kattints először jobbra fent a fiók ikonra és töltsd ki a felhasználói neved!')),
+                                  );
+                                } else {
+                                  context.goNamed(AppRoute.addCompany.name,
+                                      extra: user);
+                                }
+                              },
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                Users data = snapshot.data as Users;
+                ref
+                    .watch(firestoreRepositoryProvider)
+                    .counterCompany(data.company)
+                    .then((value) {
+                  return value;
+                });
+                final oneCounterStream = ref
+                    .watch(firestoreRepositoryProvider)
+                    .counterCompanyStream(data.company);
+
                 return SizedBox(
-                  height: 300,
-                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * 0.8,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
                     children: [
-                      Text.rich(
-                        const TextSpan(
-                            text:
-                                "A saját fiók beállításokban (jobboldalt fent ikon) tudod a felhasználói nevedet megadni"),
-                        style: TextStyle(color: Colors.amber.shade800),
-                        textAlign: TextAlign.center,
+                      StreamBuilder(
+                          stream: oneCounterStream,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return const Text(
+                                "Something went wrong",
+                              );
+                            }
+                            if (snapshot.connectionState !=
+                                    ConnectionState.waiting ||
+                                snapshot.hasData) {
+                              return Cards(
+                                  name: '${user.displayName}',
+                                  company: data.company,
+                                  address: snapshot.data!.isNotEmpty
+                                      ? snapshot.data!.single.address
+                                      : '',
+                                  counter: snapshot.data!.isNotEmpty
+                                      ? snapshot.data!.single.counter.toString()
+                                      : "");
+                            }
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }),
+                      data.approvedRole == 'hyper' ||
+                              data.approvedRole == 'hyperSuper' ||
+                              data.role == 'hyperSuper'
+                          ? TextButton(
+                              style: const ButtonStyle(
+                                  backgroundColor: MaterialStatePropertyAll(
+                                      Colors.pinkAccent)),
+                              child: const Text('CÉGVÁLTÁS'),
+                              onPressed: () =>
+                                  context.goNamed(AppRoute.companies.name),
+                            )
+                          : const SizedBox.shrink(),
+                      const SizedBox(
+                        height: 10,
                       ),
-                      const Text('Csak ezután válassz céget!'),
-                      FloatingActionButton(
-                        heroTag: 'btn2',
-                        child: const Icon(Icons.add),
-                        onPressed: () {
-                          ref
-                              .read(firebaseAuthProvider)
-                              .idTokenChanges()
-                              .listen(
-                            (User? user) {
-                              if (user?.displayName == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      duration: Duration(seconds: 6),
-                                      content: Text(
-                                          'Kattints először jobbra fent a fiók ikonra és töltsd ki a felhasználói neved!')),
-                                );
-                              } else {
-                                context.goNamed(AppRoute.addCompany.name,
-                                    extra: user);
-                              }
-                            },
-                          );
-                        },
+                      const Text(
+                        "Összes felhasználó:",
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          decorationColor: Colors.indigo, // optional
+                          decorationThickness: 2, // optional
+                          decorationStyle:
+                              TextDecorationStyle.solid, // optional
+                        ),
                       ),
+                      data.role == 'hyperSuper'
+                          ? superUsers(firestoreRepository, ref)
+                          : companyUsers(firestoreRepository, data, ref),
                     ],
                   ),
                 );
               }
-              Users data = snapshot.data as Users;
-              ref
-                  .watch(firestoreRepositoryProvider)
-                  .counterCompany(data.company)
-                  .then((value) {
-                return value;
-              });
-              final oneCounterStream = ref
-                  .watch(firestoreRepositoryProvider)
-                  .counterCompanyStream(data.company);
-
-              return SizedBox(
-                height: MediaQuery.of(context).size.height * 0.8,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    StreamBuilder(
-                        stream: oneCounterStream,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasError) {
-                            return const Text(
-                              "Something went wrong",
-                            );
-                          }
-                          if (snapshot.connectionState !=
-                                  ConnectionState.waiting ||
-                              snapshot.hasData) {
-                            return Cards(
-                                name: '${user.displayName}',
-                                company: data.company,
-                                address: snapshot.data!.isNotEmpty
-                                    ? snapshot.data!.single.address
-                                    : '',
-                                counter: snapshot.data!.isNotEmpty
-                                    ? snapshot.data!.single.counter.toString()
-                                    : "");
-                          }
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }),
-                    data.approvedRole == 'hyper' ||
-                            data.approvedRole == 'hyperSuper' ||
-                            data.role == 'hyperSuper'
-                        ? TextButton(
-                            style: const ButtonStyle(
-                                backgroundColor: MaterialStatePropertyAll(
-                                    Colors.pinkAccent)),
-                            child: const Text('CÉGVÁLTÁS'),
-                            onPressed: () =>
-                                context.goNamed(AppRoute.companies.name),
-                          )
-                        : const SizedBox.shrink(),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Text(
-                      "Összes felhasználó:",
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        decorationColor: Colors.indigo, // optional
-                        decorationThickness: 2, // optional
-                        decorationStyle: TextDecorationStyle.solid, // optional
-                      ),
-                    ),
-                    data.role == 'hyperSuper'
-                        ? superUsers(firestoreRepository, ref)
-                        : companyUsers(firestoreRepository, data, ref),
-                  ],
-                ),
-              );
-            }
-            return const Center(child: CircularProgressIndicator());
-          },
-        ),
-      ],
+              return const Center(child: CircularProgressIndicator());
+            },
+          ),
+        ],
+      ),
     );
   }
 

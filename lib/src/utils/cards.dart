@@ -17,7 +17,8 @@ class Cards extends StatelessWidget {
       children: [
         Center(
           child: Card(
-            color: const Color.fromARGB(255, 238, 241, 243),
+            color: Colors.white,
+            // color: const Color.fromARGB(255, 253, 253, 253),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
